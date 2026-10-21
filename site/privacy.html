@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De-ID · privacy</title>
+<meta name="robots" content="noindex">
+<style>
+  :root { --ink: #18181b; --muted: #71717a; --paper: #ffffff; --line: #e5e5e8; --accent: #4D7C0F; --accent-vivid: #65A30D; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ink: #f4f4f5; --muted: #a1a1aa; --paper: #111113; --line: #27272a; --accent: #A3E635; --accent-vivid: #A3E635; }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6; font-size: 16px; }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 60px; }
+  a { color: var(--accent); text-decoration: none; } a:hover { text-decoration: underline; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .92em; }
+  header { display: flex; align-items: center; justify-content: space-between; padding: 20px 0 40px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; letter-spacing: -.6px; color: var(--ink); }
+  .logo .lbar { display: inline-block; width: 14px; height: 8px; border-radius: 2px; background: var(--ink); margin: 0 3px 1px; vertical-align: baseline; }
+  .logo .lid { color: var(--accent-vivid); }
+  h1 { font-size: 34px; font-weight: 800; letter-spacing: -1.2px; line-height: 1.1; margin: 0 0 8px; }
+  .date { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+  h2 { font-size: 20px; letter-spacing: -.4px; margin: 28px 0 8px; }
+  p, li { color: var(--muted); } li { margin-bottom: 6px; }
+  b { color: var(--ink); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="logo" href="index.html" aria-label="De-ID home"><span><span>De</span><span class="lbar"></span><span class="lid">ID</span></span></a>
+    <a href="index.html">← Back</a>
+  </header>
+
+  <h1>Privacy</h1>
+  <div class="date">Beta site · 2026-10-20</div>
+
+  <h2>This website</h2>
+  <ul>
+    <li><b>It sets no cookies</b> and runs no scripts.</li>
+    <li><b>It loads nothing from third parties:</b> no fonts, analytics, tags or
+      embedded forms. Open the network tab and look.</li>
+    <li><b>It collects nothing.</b> There is no form on it. The only ways to reach
+      us are a link to the issue tracker on GitHub and an email link, both of which
+      leave this site and are covered by GitHub's and your email provider's own
+      policies.</li>
+    <li><b>Hosting.</b> The site is served by Cloudflare Pages, which keeps
+      ordinary server logs (IP address, time, page requested) under its own
+      policy. We don't add to them, and we don't run analytics on them.</li>
+    <li><b>Downloads</b> are served by GitHub Releases, under GitHub's policy.</li>
+  </ul>
+
+  <h2>The app</h2>
+  <ul>
+    <li><b>It makes no network connections.</b> No account, no telemetry, no
+      update check, no crash reports, no cloud model. Every release is tested with
+      the network blocked before it ships; see the release notes.</li>
+    <li><b>Your documents, the clean copies and the cross-reference stay on your
+      computer,</b> in your own folders and in
+      <span class="mono">~/Library/Application Support/io.github.hantswilliams.deid/</span>.
+      We never receive any of them.</li>
+    <li><b>Feedback you send us</b> by email or on GitHub is read by us and kept as
+      long as it's useful for the beta. Please don't paste real identifiers into
+      it; de-identify first.</li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p>Hants Williams · <a href="mailto:hantsawilliams@gmail.com?subject=De-ID%20privacy">hantsawilliams@gmail.com</a></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>De-ID · local-first de-identification for AI</title>
+<meta name="description" content="A desktop app that removes names, IDs, contact details and faces from PDFs, Word files, spreadsheets, text and photos, entirely on your machine. AI agents read the clean copies through a read-only tool, and every read is logged. Beta.">
+<meta name="robots" content="noindex">
+<!-- BETA SITE. Fully self-contained: no fonts, scripts or images fetched from
+     anywhere, in keeping with the product it describes. The only links out are
+     the download, the release notes and the issue tracker on GitHub.
+     Remove the robots meta above, robots.txt and the X-Robots-Tag header in
+     _headers at public launch. Working name "De-ID" throughout. -->
+<style>
+  :root {
+    --ink: #18181b; --muted: #71717a; --paper: #ffffff; --wash: #f7f7f8;
+    --line: #e5e5e8; --accent: #4D7C0F; --accent-vivid: #65A30D; --accent-soft: #ECFCCB;
+    --bar: #101012; --good: #15803d; --good-soft: #eaf4ee;
+    --warn: #b45309; --warn-soft: #fbf0dc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #f4f4f5; --muted: #a1a1aa; --paper: #111113; --wash: #18181b;
+      --line: #27272a; --accent: #A3E635; --accent-vivid: #A3E635; --accent-soft: #1A2E05;
+      --bar: #000000; --good: #34d399; --good-soft: #0c2419;
+      --warn: #fbbf24; --warn-soft: #2a2110;
+    }
+    :root:not([data-theme="light"]) .btn { color: #101012; }
+    :root:not([data-theme="light"]) .btn.ghost { color: var(--ink); }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink);
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6; font-size: 16px; }
+  .wrap { max-width: 1020px; margin: 0 auto; padding: 0 16px; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .mono { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .92em; }
+
+  header { display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 0; gap: 12px; }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800;
+    font-size: 20px; letter-spacing: -.6px; color: var(--ink); white-space: nowrap; }
+  .logo .lbar { display: inline-block; width: 14px; height: 8px; border-radius: 2px;
+    background: var(--ink); margin: 0 3px 1px; vertical-align: baseline; }
+  .logo .lid { color: var(--accent-vivid); }
+  @media (max-width: 480px) { .logo { gap: 7px; font-size: 17px; } .beta { letter-spacing: .6px; } }
+  .beta { font-size: 11px; font-weight: 750; letter-spacing: 1.2px;
+    color: var(--accent); background: var(--accent-soft);
+    border-radius: 5px; padding: 3px 8px; }
+  nav { display: flex; gap: 8px; align-items: center; }
+
+  .btn { display: inline-block; background: var(--accent); color: #fff;
+    font-weight: 650; border-radius: 9px; padding: 13px 22px; }
+  .btn:hover { text-decoration: none; filter: brightness(1.08); }
+  .btn.ghost { background: transparent; color: var(--ink);
+    border: 1px solid var(--line); }
+  .btn.sm { padding: 9px 14px; font-size: 14px; }
+
+  .hero { padding: 56px 0 30px; display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
+    gap: 48px; align-items: center; }
+  h1 { font-size: clamp(34px, 5vw, 54px); font-weight: 800;
+    letter-spacing: -1.8px; line-height: 1.07; margin: 0 0 18px; }
+  .hero p.sub { font-size: 19px; color: var(--muted); margin: 0 0 26px; }
+  .hero .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .cta .small { font-size: 13px; color: var(--muted); flex-basis: 100%; }
+
+  /* CSS mockup of the Run screen: no real screenshot, nothing to leak */
+  .mock { background: var(--wash); border: 1px solid var(--line);
+    border-radius: 14px; box-shadow: 0 24px 60px #0000001f;
+    overflow: hidden; font-size: 12px; }
+  .mock .bar3 { display: flex; gap: 6px; padding: 11px 13px;
+    border-bottom: 1px solid var(--line); }
+  .mock .bar3 i { width: 10px; height: 10px; border-radius: 50%;
+    background: var(--line); }
+  .mock .pad { padding: 14px 16px 16px; }
+  .mock h4 { margin: 0 0 10px; font-size: 14px; letter-spacing: -.3px; }
+  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    margin-bottom: 10px; }
+  .tile { background: var(--paper); border: 1px solid var(--line);
+    border-radius: 8px; padding: 9px 11px; }
+  .tile b { display: block; font-size: 17px; letter-spacing: -.5px; }
+  .tile span { color: var(--muted); font-size: 10.5px; }
+  .frow { display: flex; align-items: center; gap: 8px; background: var(--paper);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px;
+    margin-top: 6px; }
+  .frow .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; }
+  .pill { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 2px 7px; }
+  .pill.g { color: var(--good); background: var(--good-soft); }
+  .pill.w { color: var(--warn); background: var(--warn-soft); }
+  .pill.n { color: var(--muted); background: var(--wash); border: 1px solid var(--line); }
+  .mock .ai { margin-top: 10px; color: var(--muted); font-size: 11px;
+    display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .sw { display: inline-flex; align-items: center; gap: 6px; }
+  .sw i { width: 22px; height: 12px; border-radius: 7px; background: var(--line);
+    position: relative; display: inline-block; }
+  .sw i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 8px;
+    height: 8px; border-radius: 50%; background: var(--paper); }
+
+  .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    background: var(--wash); margin-top: 26px; }
+  .strip .wrap { display: flex; flex-wrap: wrap; gap: 6px 30px;
+    justify-content: center; padding: 14px 16px; font-size: 13.5px;
+    color: var(--muted); }
+  .strip b { color: var(--ink); font-weight: 650; }
+
+  section { padding: 58px 0 10px; }
+  .kicker { font-size: 12px; font-weight: 750; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  h2 { font-size: clamp(26px, 3.4vw, 36px); font-weight: 750;
+    letter-spacing: -1px; line-height: 1.15; margin: 0 0 14px; }
+  h3 { font-size: 17px; letter-spacing: -.3px; margin: 0 0 8px; }
+  .lead { color: var(--muted); max-width: 680px; margin: 0 0 30px; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .grid2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+  .card { background: var(--wash); border: 1px solid var(--line);
+    border-radius: 12px; padding: 22px; }
+  .grid4 .card { padding: 18px; }
+  .card .n { font-weight: 800; color: var(--accent); font-size: 13px; }
+  .card b.t { display: block; font-size: 17px; letter-spacing: -.3px;
+    margin: 6px 0 8px; }
+  .card .head { display: flex; align-items: baseline; gap: 10px; margin: 0 0 8px; }
+  .card .head .n { font-size: 17px; }
+  .card .head b.t { margin: 0; }
+  .card p { margin: 0; font-size: 14.5px; color: var(--muted); }
+  .card p + p { margin-top: 8px; }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+
+  .proof { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+  .proof .card { background: var(--paper); }
+  .proof .mono.big { display: block; font-size: 15px; color: var(--good);
+    margin-bottom: 8px; }
+
+  .tokenline { background: var(--bar); color: #e4e4e7; border-radius: 10px;
+    padding: 18px 20px; font-size: 13.5px; line-height: 1.9; margin-top: 22px; }
+  .tokenline .t { color: #BEF264; }
+
+  /* the agent door: a chain of nodes */
+  .chain { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap;
+    margin: 6px 0 22px; }
+  .node { flex: 1 1 180px; background: var(--wash); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 14px; font-size: 13.5px; position: relative; }
+  .node b { display: block; font-size: 14px; margin-bottom: 3px; }
+  .node span { color: var(--muted); font-size: 12.5px; }
+  .node.hot { border-color: var(--accent-vivid); border-width: 2px; }
+  .node.off { border-style: dashed; }
+  .arrow { align-self: center; color: var(--muted); font-size: 20px; padding: 0 2px; }
+  table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
+  th { text-align: left; font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--muted); padding: 8px 12px 8px 0; border-bottom: 2px solid var(--ink); }
+  td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top;
+    color: var(--muted); line-height: 1.5; }
+  td:first-child { color: var(--ink); }
+
+  .faq { max-width: 720px; }
+  .faq details { border-top: 1px solid var(--line); padding: 4px 0; }
+  .faq details:last-child { border-bottom: 1px solid var(--line); }
+  .faq summary { font-weight: 650; padding: 12px 0; cursor: pointer; }
+  .faq p { margin: 0 0 16px; color: var(--muted); }
+
+  /* download */
+  .dl { background: var(--wash); border: 1px solid var(--line); border-radius: 14px;
+    padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+  .dl .meta { font-size: 13.5px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
+  .dl .sha { word-break: break-all; font-size: 12px; }
+  .dl ol { margin: 8px 0 0; padding-left: 1.2em; font-size: 14.5px; color: var(--muted); }
+  .dl li { margin-bottom: 6px; }
+  .dl .links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+  .final { text-align: center; padding: 70px 0 40px; }
+  footer { border-top: 1px solid var(--line); margin-top: 40px; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 28px;
+    justify-content: space-between; padding: 22px 16px; font-size: 12.5px;
+    color: var(--muted); }
+
+  @media (max-width: 900px) {
+    .grid4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 34px; }
+    .grid3, .proof, .grid2, .dl { grid-template-columns: 1fr; }
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .chain { flex-direction: column; }
+    .node { flex: 0 0 auto; }
+    .arrow { transform: rotate(90deg); align-self: flex-start; margin-left: 12px; }
+  }
+  @media (max-width: 560px) {
+    .grid4 { grid-template-columns: 1fr; }
+    nav .btn.ghost { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="logo" aria-label="De-ID">
+      <span><span>De</span><span class="lbar"></span><span class="lid">ID</span></span>
+      <span class="beta">BETA 0.4.1</span>
+    </div>
+    <nav>
+      <a class="btn ghost sm" href="#agents">For AI agents</a>
+      <a class="btn sm" href="#download">Download</a>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <div>
+      <h1>Local&#8209;first de&#8209;identification for&nbsp;AI.</h1>
+      <p class="sub">A desktop app that removes names, IDs, contact details and faces
+        from PDFs, Word files, spreadsheets, text and photos <b>entirely on your
+        machine</b>. There's no account to set up, and your files never touch the
+        network. AI agents on the same computer read the clean copies through
+        De&#8209;ID's own read-only tool, and every read is logged.</p>
+      <div class="cta">
+        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.1/De-ID_0.4.1_aarch64.dmg">Download the beta · macOS</a>
+        <a class="btn ghost" href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.1">Release notes</a>
+        <span class="small">0.4.1 · macOS 13 or later · Apple silicon · notarized · about 600 MB. Windows is being built and isn't in this release.</span>
+      </div>
+    </div>
+    <div class="mock" role="img" aria-label="The app after a run: identifiers and faces removed, files marked clean or needing review, sharing with agents off">
+      <div class="bar3"><i></i><i></i><i></i></div>
+      <div class="pad">
+        <h4>2026 packets <span style="color:var(--muted);font-weight:400">· 6 files · 9 s · FERPA</span></h4>
+        <div class="tiles">
+          <div class="tile"><b>847</b><span>identifiers removed</span></div>
+          <div class="tile"><b>3</b><span>faces removed</span></div>
+          <div class="tile"><b>2</b><span>pages read by OCR</span></div>
+          <div class="tile"><b>1</b><span>page to check</span></div>
+        </div>
+        <div class="frow"><span class="name">Abbott_note.txt</span><span class="pill g">Clean</span></div>
+        <div class="frow"><span class="name">Lee_scanned_letter.pdf</span><span class="pill w">Review</span></div>
+        <div class="frow"><span class="name">Reyes_passport_copy.jpg</span><span class="pill w">Review</span></div>
+        <div class="frow"><span class="name">Reyes_Omar_letter.pdf</span><span class="pill g">Clean</span></div>
+        <div class="ai">
+          <span>Files for AI: <b>4 ready</b> · 2 waiting for review</span>
+          <span class="sw"><i></i> Share with agents: off</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="strip"><div class="wrap">
+  <span><b>0</b> outbound connections</span>
+  <span><b>Every file</b> read twice</span>
+  <span><b>No account</b> or telemetry</span>
+  <span><b>Agents see</b> clean copies only</span>
+</div></div>
+
+<div class="wrap">
+  <section id="how">
+    <div class="kicker">How it works</div>
+    <h2>Drop a folder in. Clean copies come out.</h2>
+    <div class="grid4">
+      <div class="card"><div class="head"><span class="n">1</span><b class="t">Drop files or a folder</b></div>
+        <p>PDFs (scans go through OCR), Word, Excel, CSV, Parquet, plain text, and
+        photos (JPEG, PNG, TIFF, WebP). Pick labels like <span class="mono">&lt;PERSON&gt;</span>
+        or consistent tokens, add names you already know, and choose a
+        standard at the top of Options if a run has to stay within one.</p></div>
+      <div class="card"><div class="head"><span class="n">2</span><b class="t">Review what matters</b></div>
+        <p>Every output is re-read, and a file that still looks like it contains an
+        identifier is never saved. The app points you at the pages to check and
+        shows originals and clean copies side by side.</p>
+        <p>Missed something? Select the text and remove it everywhere in the run,
+        or drag a box over a face or a signature and black it out. Undo takes it back.</p></div>
+      <div class="card"><div class="head"><span class="n">3</span><b class="t">Use it</b></div>
+        <p>Clean copies land next to your originals. One switch adds a
+        <span class="mono">(for AI)</span> folder with Markdown, CSV and a read-me that
+        tells the model how to read the placeholders. The run report exports as
+        Excel; the cross-reference back to the originals stays private.</p></div>
+      <div class="card"><div class="head"><span class="n">4</span><b class="t">Let agents in, on your terms</b></div>
+        <p>Claude Code, Claude Desktop and Copilot in VS Code read the runs you
+        share through De&#8209;ID's own read-only tool. Originals stay out of reach,
+        and every read is logged.</p>
+        <p class="note">Desktop app; macOS today. <a href="#agents">How it works ↓</a></p></div>
+    </div>
+    <div class="tokenline mono">Candidate: <span class="t">&lt;PERSON_7f3a2c&gt;</span> · <span class="t">&lt;EMAIL_ADDRESS_57898c&gt;</span> · <span class="t">&lt;PHONE_NUMBER_b3179c&gt;</span><br>The same person gets the same token across the whole run, in the text and in the black boxes on the page.</div>
+  </section>
+
+  <section id="trust">
+    <div class="kicker">Why trust it</div>
+    <h2>Don't take our word for any of this.</h2>
+    <p class="lead">A de-identification tool asks for a lot of trust, so this one
+      tests itself, tells you where it might be wrong, and lets you check what it
+      did.</p>
+    <div class="proof">
+      <div class="card"><span class="mono big">cloud calls: 0</span>
+        <b class="t">Everything stays on your machine</b>
+        <p>De-identification runs entirely on your computer. Your files never go
+        to a cloud API, and no remote model helps decide what to remove. Before
+        every release we run the app with the network blocked, including the
+        agents' tool and the OCR workers as their own processes, and it ships only
+        if nothing ever tried to connect.</p></div>
+      <div class="card"><span class="mono big">second read: clean</span>
+        <b class="t">Every file is read twice</b>
+        <p>The first read finds and removes identifiers. The second goes over the
+        clean copy looking for anything that slipped through, including the names
+        you added. If it finds something, the file isn't saved.</p></div>
+      <div class="card"><span class="mono big">to review: 1 page</span>
+        <b class="t">Human in the loop when needed</b>
+        <p>No tool catches everything. A page the app couldn't read, a page with
+        little on it beyond dates and places, and every photo are flagged and
+        linked so a person makes the call.</p></div>
+      <div class="card"><span class="mono big">repeat-check: identical</span>
+        <b class="t">The same result every run</b>
+        <p>Run the same files again and the outputs are identical, byte for byte.
+        An auditor can re-run a job and compare; a reviewer can trust that what
+        they signed off is what was saved.</p></div>
+      <div class="card"><span class="mono big">audit: 0 flags</span>
+        <b class="t">See who actually opened what</b>
+        <p>For a window you choose, the app watches your folders with macOS's own
+        event log, lists every program that opened a file in them, and flags any
+        AI agent that read an original. Then you don't have to take the tool's
+        word for it either.</p>
+        <p class="note">macOS only, and it needs your administrator password in Terminal for now.</p></div>
+    </div>
+  </section>
+
+  <section id="agents">
+    <div class="kicker">For AI agents</div>
+    <h2>One door for agents, and a log of who walked through it.</h2>
+    <p class="lead">Coding agents on your own computer are the new way sensitive
+      documents leak. De&#8209;ID gives Claude Code, Claude Desktop and Copilot in VS
+      Code one read-only way in: the de-identified copies of the runs you choose
+      to share, and nothing else.</p>
+    <div class="chain" role="img" aria-label="An AI agent calls De-ID's read-only tool, which reaches the app's service with its own token, which serves only the shared de-identified runs and writes an activity log. A hook blocks Claude Code from reading the originals.">
+      <div class="node"><b>Your AI agent</b><span>Claude Code · Claude Desktop · Copilot in VS Code</span></div>
+      <div class="arrow">→</div>
+      <div class="node hot"><b>De&#8209;ID's tool</b><span>list files · read a page range · search. Read-only; its own token; opens nothing else.</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>The runs you shared</b><span>De-identified copies only, under <span class="mono">FILE-</span> labels. Off by default per run.</span></div>
+      <div class="arrow">→</div>
+      <div class="node off"><b>Activity log</b><span>Every call, without its content. A search that looks like a name is flagged and not kept.</span></div>
+    </div>
+    <div class="grid2">
+      <div>
+        <table>
+          <tr><th>An agent can</th><th>An agent can't</th></tr>
+          <tr><td>List the shared files: label, run, pages, whether reviewed</td><td>See a run you haven't shared</td></tr>
+          <tr><td>Read one, a page range at a time</td><td>See an original, an original file name, or a folder path</td></tr>
+          <tr><td>Search their text</td><td>Send text in to be de-identified, or get a name back</td></tr>
+          <tr><td></td><td>Reach the cross-reference, or anything but those three calls</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <b class="t">And Claude Code stays out of the originals</b>
+        <p>A one-line hook, set up from Settings → AI tools, runs before each of
+        Claude Code's file reads: it blocks the folders that hold your originals
+        and logs reads of the clean copies. The tool's instructions tell the model
+        how to read the placeholders, never to guess who anyone is, and to cite
+        <span class="mono">FILE-&lt;id&gt; page N</span>.</p>
+        <p class="note">Why read-only: anything an agent could send in to be de-identified is
+        already in its context. You decide what gets de-identified, in the app,
+        and what agents may see.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="standards">
+    <div class="kicker">Standards</div>
+    <h2>FERPA and HIPAA Safe Harbor, as a switch.</h2>
+    <p class="lead">Choose one or both at the top of Options. The settings the
+      standard needs are switched on and locked for that run: the types it lists,
+      photos and faces removed, scanned pages read.</p>
+    <div class="grid2">
+      <div class="card"><b class="t">What the switch does</b>
+        <p>Turns on and locks the identifier types the standard lists (for Safe
+        Harbor, the 18, including labelled IDs such as MRN, member and policy
+        numbers, ages over 89, ZIP codes on their own, organisations and places of
+        birth), removes photos and faces, and reads every scanned page.</p>
+        <p>The run report says which standard's settings were on.</p></div>
+      <div class="card"><b class="t">What it never says</b>
+        <p>"Compliant." Both standards end in a human judgement: Safe Harbor needs
+        no actual knowledge that what's left could identify someone; FERPA needs a
+        reasonable determination that a student can't be identified. De&#8209;ID can
+        say the settings were on and what review is still needed. The judgement
+        stays yours.</p></div>
+    </div>
+  </section>
+
+  <section id="who">
+    <div class="kicker">Who it's for</div>
+    <h2>Wherever documents can't leave the building.</h2>
+    <div class="grid3">
+      <div class="card"><b class="t">Universities</b>
+        <p>Registrar, admissions and IRB offices working under FERPA can share
+        packets and corpora, and let an AI reader at them, without sending a
+        student identity anywhere.</p></div>
+      <div class="card"><b class="t">Healthcare</b>
+        <p>Remove patient names, IDs, contact details and photos from records and
+        clinical notes on the machine they already live on, with a report for
+        your HIPAA review.</p></div>
+      <div class="card"><b class="t">Legal</b>
+        <p>Scrub case files and privileged documents locally, so nothing leaves
+        the firm before you've decided it should.</p></div>
+      <div class="card"><b class="t">Public records</b>
+        <p>Records offices with a redaction backlog and a policy that keeps
+        documents off the cloud. Faces on ID copies and signatures included.</p></div>
+      <div class="card"><b class="t">Teams using coding agents</b>
+        <p>The person who wants Claude Code on a folder of records, and the
+        security team that wants to know exactly what it read.</p></div>
+      <div class="card"><b class="t">Research teams</b>
+        <p>Preparing document sets for local models under a data-use agreement.
+        The <span class="mono">(for AI)</span> folder and the agent tool were built
+        for exactly that.</p></div>
+      <div class="card"><b class="t">Finance</b>
+        <p>Statements, loan files and tax forms are full of SSNs, account numbers
+        and card numbers. Clean them locally before they go into an AI tool or
+        out to a reviewer.</p></div>
+      <div class="card"><b class="t">Government &amp; defense</b>
+        <p>For agencies and contractors whose documents can't touch the internet.
+        De&#8209;ID needs no network at all, so it runs on isolated or air-gapped
+        machines.</p></div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="kicker">Questions</div>
+    <h2>The short version.</h2>
+    <div class="faq">
+      <details><summary>Does anything ever leave my machine?</summary>
+        <p>No. The app has no account, telemetry, update check or cloud service.
+        Before we ship a release, we run a network audit on it: the app cleans a
+        set of sample files with the network blocked, the agents' tool and the
+        OCR workers run as their own processes, and if anything tries to connect
+        even once, that release doesn't go out.</p></details>
+      <details><summary>Does it guarantee every identifier is removed?</summary>
+        <p>No, and you should distrust any tool that says yes. It removes what it
+        finds, re-checks its own output, won't save a file that fails that check,
+        points you at the pages a human should review, and lets you fix what it
+        missed and re-run.</p></details>
+      <details><summary>Is it HIPAA or FERPA compliant?</summary>
+        <p>No tool can be; compliance is a judgement about a dataset, made by a
+        person. De&#8209;ID removes what the Safe Harbor list and FERPA need removed
+        when you choose that standard, and the run report says the settings were
+        on and what review is still needed. The judgement stays yours.</p></details>
+      <details><summary>Can my AI agent read the files?</summary>
+        <p>Yes, if you share the run. Claude Code, Claude Desktop and Copilot in VS
+        Code connect to De&#8209;ID's own tool and can list, read and search the
+        de-identified copies of shared runs. They can't see originals, original
+        names or paths, and every call is logged without its content.</p></details>
+      <details><summary>Can it stop Claude Code from reading the originals?</summary>
+        <p>A hook, set up from Settings → AI tools, blocks Claude Code's reads of
+        the folders you list and logs reads of the clean copies. The hook only
+        sees what goes through it, which is why there is also an audit: on a Mac
+        the app can watch the folders themselves and show you every program that
+        opened a file.</p></details>
+      <details><summary>What does it do with photos?</summary>
+        <p>Photos inside PDFs are removed, and faces on scans (an ID or passport
+        copy) and on photos are blacked out, using a small face detector bundled
+        with the app: it finds that a face is there, never whose it is. Hidden
+        picture data (GPS, camera serial, owner name, dates, embedded thumbnails)
+        is always removed. Charts, logos and letterhead stay. Every photo is
+        flagged for review, because a house, a car or a tattoo can identify
+        someone too. HEIC isn't read yet; export it as JPEG.</p></details>
+      <details><summary>What file types does it handle?</summary>
+        <p>PDF (including scans, via OCR), Word, Excel, CSV, Parquet, plain text,
+        and JPEG, PNG, TIFF and WebP photos. PDFs come out as redacted PDFs, clean
+        Markdown, or both; photos come back upright as the cleaned picture plus
+        their text.</p></details>
+      <details><summary>What happens to the mapping back to the originals?</summary>
+        <p>It stays on your machine in a separate cross-reference that only
+        leaves if you export it yourself. Shared reports and agents refer to files
+        only by generated labels.</p></details>
+      <details><summary>What do I get during the beta, and what do you want back?</summary>
+        <p>The full app, free, on macOS (Apple silicon); Windows is being built.
+        In return we'd like honest feedback, especially about anything it missed,
+        through the issue tracker or by email.</p></details>
+    </div>
+  </section>
+
+  <section id="download">
+    <div class="kicker">Beta download</div>
+    <h2>Put it on one machine.<br>Point it at one folder.</h2>
+    <p class="lead">That's the whole ask. If it saves your team an afternoon of
+      manual redaction, tell us. If it misses something, definitely tell us.</p>
+    <div class="dl">
+      <div>
+        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.1/De-ID_0.4.1_aarch64.dmg">Download De&#8209;ID 0.4.1 for macOS</a>
+        <div class="meta">
+          macOS 13 or later · Apple silicon (M1 or newer) · about 600 MB · signed and notarized<br>
+          Pilot build for testing · <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.1">release notes</a><br>
+          <span class="mono sha">SHA-256 d89a381b497c06b011d86a6ec29ceec40a5d0ead09712c6f56ee9a3a0566337f</span>
+        </div>
+        <div class="links">
+          <a class="btn ghost sm" href="https://github.com/hantswilliams/de-id-public/issues">Report a problem</a>
+          <a class="btn ghost sm" href="mailto:hantsawilliams@gmail.com?subject=De-ID%20beta">Email feedback</a>
+        </div>
+      </div>
+      <div>
+        <h3>Install</h3>
+        <ol>
+          <li>Open the DMG and drag <b>De&#8209;ID</b> to Applications. It's notarized, so it opens like any other app.</li>
+          <li>First run takes a moment while the model loads. Nothing is downloaded; it's all in the app.</li>
+          <li>Drop a folder in. Clean copies appear next to it in <span class="mono">&lt;folder&gt; (de-identified)/</span>.</li>
+          <li>To update, do the same with a newer DMG. Your data folder is kept.</li>
+        </ol>
+        <p class="note">Your data lives in <span class="mono">~/Library/Application Support/io.github.hantswilliams.deid/</span>:
+        the cross-reference (as sensitive as your originals), run history and settings. Keep FileVault on.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer><div class="wrap">
+  <span>© 2026 Hants Williams · De&#8209;ID is a working name</span>
+  <span><a href="privacy.html">Privacy</a> · <a href="https://github.com/hantswilliams/de-id-public/releases">Releases</a> · Runs offline · No account needed</span>
+</div></footer>
+
+</body>
+</html>

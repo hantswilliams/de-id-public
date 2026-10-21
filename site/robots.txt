@@ -1,0 +1,4 @@
+# Beta: keep the site out of search engines. Delete this file at public launch
+# (and the X-Robots-Tag header in _headers, and the robots meta in each page).
+User-agent: *
+Disallow: /
