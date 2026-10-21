@@ -1,0 +1,56 @@
+# Deploys site/ to GitHub Pages on every push to main that touches it.
+# One-time setup: Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# The site is plain HTML; there is no build step. Before uploading, the check
+# step fails the deploy if any page references a script, stylesheet, font or
+# image from outside the site, so the page can never quietly stop being
+# self-contained. Links (<a href>) to GitHub are fine; fetches are not.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: The site loads nothing from anywhere else
+        run: |
+          set -euo pipefail
+          bad=0
+          for f in site/*.html; do
+            # any <script>, any src= fetch, any <link> to another host, any CSS url()/@import to another host
+            if grep -nE '<script|[[:space:]]src="|<link[^>]*href="https?:|url\(https?:|@import' "$f"; then
+              echo "::error file=$f::$f references a script or an external resource"; bad=1
+            fi
+          done
+          test "$bad" = 0
+          echo "ok: $(ls site/*.html | wc -l) pages, no scripts, no external fetches"
+
+      - uses: actions/configure-pages@v6
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: site
+
+      - id: deployment
+        uses: actions/deploy-pages@v5
