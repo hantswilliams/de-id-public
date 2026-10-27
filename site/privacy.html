@@ -37,7 +37,7 @@
   </header>
 
   <h1>Privacy</h1>
-  <div class="date">Beta site · 2026-10-22</div>
+  <div class="date">Beta site · 2026-10-27</div>
 
   <h2>This website</h2>
   <ul>
@@ -59,11 +59,16 @@
     <li><b>It makes no network connections.</b> No account, no telemetry, no
       update check, no crash reports, no cloud model. Every release is tested with
       the network blocked before it ships; see the release notes.</li>
+    <li><b>AI tools you use with it make their own connections.</b> When you
+      paste a de-identified copy into an AI chat, or run a command-line AI tool in
+      De-ID's AI terminal, that service receives what you give it, under its own
+      policy. De-ID's part is to hand it the version without the names.</li>
     <li><b>Your documents, the clean copies and the cross-reference stay on your
       computer,</b> in your own folders and in the app's data folder
-      (<span class="mono">~/Library/Application Support/io.github.hantswilliams.deid/</span>
+      (<span class="mono">~/Library/Application Support/app.deid.desktop/</span>
       on a Mac, <span class="mono">%LOCALAPPDATA%\io.github.hantswilliams.deid\</span>
-      on Windows). We never receive any of them.</li>
+      on Windows). So does the link between each token and the name it stands
+      for. We never receive any of them.</li>
     <li><b>Feedback you send us</b> by email or on GitHub is read by us and kept as
       long as it's useful for the beta. Please don't paste real identifiers into
       it; de-identify first.</li>

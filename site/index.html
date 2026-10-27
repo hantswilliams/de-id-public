@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>De-ID · local-first de-identification for AI</title>
-<meta name="description" content="A desktop app that removes names, IDs, contact details and faces from PDFs, Word files, spreadsheets, text and photos, entirely on your machine. AI agents read the clean copies through a read-only tool, and every read is logged. Beta.">
+<meta name="description" content="A desktop app that removes names, IDs, contact details and faces from PDFs, Word files, spreadsheets, text and photos, entirely on your machine. Copy text de-identified into any AI chat and get the names back in the answer, run AI tools with what you type de-identified first, and let agents read clean copies through a read-only tool that logs every read. Beta.">
 <meta name="robots" content="noindex">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; script-src 'none'; form-action 'none'; base-uri 'none'">
 <!-- BETA SITE. Fully self-contained: no fonts, scripts or images fetched from
@@ -150,6 +150,9 @@
   .node span { color: var(--muted); font-size: 12.5px; }
   .node.hot { border-color: var(--accent-vivid); border-width: 2px; }
   .node.off { border-style: dashed; }
+  .node .mono { overflow-wrap: anywhere; }
+  .node .tok { color: var(--accent); font-weight: 650; }
+  .node .back { color: var(--ink); background: var(--accent-soft); border-radius: 3px; padding: 0 3px; }
   .arrow { align-self: center; color: var(--muted); font-size: 20px; padding: 0 2px; }
   table { border-collapse: collapse; width: 100%; font-size: 14.5px; }
   th { text-align: left; font-size: 11.5px; letter-spacing: 1px; text-transform: uppercase;
@@ -253,6 +256,8 @@
   /* download */
   .dl { background: var(--wash); border: 1px solid var(--line); border-radius: 14px;
     padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+  .dl .older { scroll-margin-top: 20px; }
+  .dl .older .lede { margin: 0 0 14px; }
   .dl h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
   .dl .meta { font-size: 13.5px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
   .dl .sha { word-break: break-all; font-size: 12px; }
@@ -297,7 +302,7 @@
   <header>
     <div class="logo" aria-label="De-ID">
       <span><span>De</span><span class="lbar"></span><span class="lid">ID</span></span>
-      <span class="beta">BETA 0.4.3</span>
+      <span class="beta">BETA 0.5.1</span>
     </div>
     <nav>
       <a class="btn ghost sm" href="#agents">For AI agents</a>
@@ -310,15 +315,16 @@
       <h1>Local&#8209;first de&#8209;identification for&nbsp;AI.</h1>
       <p class="sub">A desktop app that removes names, IDs, contact details and faces
         from PDFs, Word files, spreadsheets, text and photos <b>entirely on your
-        machine</b>. There's no account to set up, and your files never touch the
-        network. AI agents on the same computer read the clean copies through
-        De&#8209;ID's own read-only tool, and every read is logged.</p>
+        machine</b>, with no account and no network. Then use any AI with the
+        clean version: copy text de-identified into a chat and get the names back
+        in the answer, or run Claude Code with what you type de-identified
+        first.</p>
       <div class="cta">
-        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_aarch64.dmg">Download for macOS</a>
-        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Download for Windows</a>
-        <span class="small">Beta 0.4.3 · macOS 14 or later on Apple silicon, signed and notarized ·
-          Windows 10 or 11, not signed yet (<a href="#download">how to install it</a>) ·
-          <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.3">release notes</a></span>
+        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.5.1/De-ID_0.5.1_aarch64.dmg">Download for macOS</a>
+        <a class="btn ghost" href="#windows">Windows (0.4.3)</a>
+        <span class="small">Beta 0.5.1 · macOS 14 or later on Apple silicon · signed and notarized ·
+          <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.5.1">release notes</a>.
+          Windows has the earlier 0.4.3, without what's new in 0.5.</span>
       </div>
     </div>
     <div class="mock" role="img" aria-label="The app after a run: identifiers and faces removed, files marked clean or needing review, sharing with agents off">
@@ -383,6 +389,66 @@
     <div class="tokenline mono">Candidate: <span class="t">&lt;PERSON_7f3a2c&gt;</span> · <span class="t">&lt;EMAIL_ADDRESS_57898c&gt;</span> · <span class="t">&lt;PHONE_NUMBER_b3179c&gt;</span><br>The same person gets the same token across the whole run, in the text and in the black boxes on the page.</div>
   </section>
 
+  <section id="ai">
+    <div class="kicker">New in 0.5 · Mac</div>
+    <h2>Use any AI. Leave the names behind.</h2>
+    <p class="lead">De&#8209;ID now works where the text already is: the clipboard, a
+      terminal, a folder and Finder. What an AI sees has the names taken out on
+      your Mac first, and what comes back can have them put back, on your screen
+      only.</p>
+    <div class="chain" role="img" aria-label="You copy a request that names Omar Reyes and gives his email address. After pressing Command-C twice, the AI gets the same request with a person token and an email token instead. Restore names on the AI's answer puts Omar Reyes back, marked.">
+      <div class="node"><b>You copy</b><span class="mono">Summarise Omar Reyes's appeal and
+        draft a reply to omar.reyes@example.com.</span></div>
+      <div class="arrow">→</div>
+      <div class="node hot"><b>⌘C twice: the AI gets</b><span class="mono">Summarise
+        <span class="tok">&lt;PERSON_4f2a1c&gt;</span>'s appeal and draft a reply to
+        <span class="tok">&lt;EMAIL_ADDRESS_9b1d07&gt;</span>.</span></div>
+      <div class="arrow">→</div>
+      <div class="node"><b>Restore names on the answer</b><span class="mono">Dear
+        <span class="back">Omar Reyes</span>, thank you for your appeal…</span></div>
+    </div>
+    <div class="grid2">
+      <div class="card"><b class="t">Copy de-identified, Restore names</b>
+        <p>Select text anywhere, hold ⌘ and press C twice quickly. The clipboard
+        now holds it with names, emails, phone numbers and IDs swapped for tokens,
+        and a notification says what was replaced. Paste it into ChatGPT, Claude or
+        any chat: the same person keeps the same token for the whole conversation,
+        so the AI can follow along.</p>
+        <p>Copy the answer the same way and a small window shows it with the real
+        names back and marked, after a check for a real name the AI shouldn't have
+        had, a token from an earlier conversation, or one it made up.</p></div>
+      <div class="card"><b class="t">The AI terminal</b>
+        <p>Run Claude Code, Codex, Gemini CLI, OpenCode, Aider and others in a
+        terminal inside De&#8209;ID, signed in with their own accounts. Type in the
+        box under the terminal: names and IDs are underlined as you type, and on
+        Enter the tool gets the text with tokens. Pastes are cleaned too, and
+        <b>Attach a clean copy…</b> hands it a file, de-identified with the same
+        tokens.</p>
+        <p>Answers keep the tokens; hover one to see who it is, on your screen
+        only. Claude Code runs <b>Contained</b> by default: no shell, no web, and
+        only its session folder to read.</p></div>
+      <div class="card"><b class="t">The De&#8209;ID folder</b>
+        <p>Turn it on in Settings, and anything dropped into
+        <span class="mono">~/de-id/to-deidentify</span> is cleaned with your
+        defaults, even with the window closed. Clean copies land in
+        <span class="mono">~/de-id/deidentified</span> (those to review in
+        <span class="mono">needs-review</span>), and the originals move to
+        <span class="mono">done</span>. On battery, files wait until you plug
+        in.</p></div>
+      <div class="card"><b class="t">From Finder and the menu bar</b>
+        <p>Right-click files or a folder → <b>De-identify with De&#8209;ID</b> to
+        clean them with your defaults, or <b>Open With → De&#8209;ID</b> to choose
+        how. Close the window and De&#8209;ID stays in the menu bar: runs carry on,
+        a notification says when each ends, and <b>Open at login</b> starts it
+        with just the icon.</p></div>
+    </div>
+    <p class="note">Mac only; the Windows version is still 0.4.3. De&#8209;ID itself
+      connects to nothing: a chat or a command-line tool makes its own connections,
+      as it always would, and what it gets from De&#8209;ID is the de-identified
+      version. Which name a token stands for stays in De&#8209;ID's data folder for
+      30 days after a conversation's last use.</p>
+  </section>
+
   <section id="trust">
     <div class="kicker">Why trust it</div>
     <h2>Built to be checked.</h2>
@@ -392,8 +458,9 @@
     <div class="proof">
       <div class="card"><span class="mono big">cloud calls: 0</span>
         <b class="t">Everything stays on your machine</b>
-        <p>De-identification runs entirely on your computer. Your files never go
-        to a cloud API, and no remote model helps decide what to remove. Before
+        <p>De-identification runs entirely on your computer. De&#8209;ID never sends
+        your files or text anywhere, and no remote model helps decide what to
+        remove. Before
         every release, Mac and Windows alike, we run the app with the network
         blocked, including the agents' tool, the Claude Code hook and the OCR
         workers as their own processes, and it ships only if nothing ever tried
@@ -604,6 +671,10 @@
         <p>For agencies and contractors whose documents can't touch the internet.
         De&#8209;ID needs no network at all, so it runs on isolated or air-gapped
         machines.</p></div>
+      <div class="card"><b class="t">Anyone pasting into an AI chat</b>
+        <p>Staff who already paste emails and case notes into ChatGPT or Claude.
+        Press ⌘C twice and the names come out first; copy the answer the same way
+        and they go back in. <a href="#ai">How ↑</a></p></div>
     </div>
   </section>
 
@@ -612,11 +683,20 @@
     <h2>The short version.</h2>
     <div class="faq">
       <details><summary>Does anything ever leave my machine?</summary>
-        <p>No. The app has no account, telemetry, update check or cloud service.
-        Before we ship a release, we run a network audit on it: the app cleans a
-        set of sample files with the network blocked, the agents' tool and the
-        OCR workers run as their own processes, and if anything tries to connect
-        even once, that release doesn't go out.</p></details>
+        <p>Not from De&#8209;ID. The app has no account, telemetry, update check or
+        cloud service. Before we ship a release, we run a network audit on it: the
+        app cleans a set of sample files with the network blocked, the agents' tool
+        and the OCR workers run as their own processes, and if anything tries to
+        connect even once, that release doesn't go out.</p>
+        <p>When you paste a de-identified copy into an AI chat, or run a tool in
+        the AI terminal, that service gets what you give it, as it always would.
+        De&#8209;ID's job is to make that the version without the names.</p></details>
+      <details><summary>Where does the link between a token and a name live?</summary>
+        <p>On your Mac only, in De&#8209;ID's data folder, like the crosswalk.
+        <b>Copy and restore</b>, in the sidebar, lists each conversation with its
+        copies and restores as counts, never the text, with <b>Forget</b> for each.
+        A conversation's tokens are kept for 30 days after its last use. The AI
+        never gets a way back to a name; restoring happens on your screen.</p></details>
       <details><summary>What does it look for?</summary>
         <p>Names; street addresses and PO boxes; email addresses and phone numbers;
         SSNs, ITINs and EINs, including masked ones; student and record IDs; bank,
@@ -681,8 +761,10 @@
         run report and the Agent activity PDF. It never goes into a de-identified
         file or Files for AI.</p></details>
       <details><summary>What do I get during the beta, and what do you want back?</summary>
-        <p>The full app, free, on macOS (Apple silicon) and Windows. Intel Macs
-        and Linux are being built. The documentation is in the app, under
+        <p>The full app, free: 0.5.1 on macOS (Apple silicon), and the earlier
+        0.4.3 on Windows, without the clipboard, the AI terminal, the De&#8209;ID
+        folder or Finder. Intel Macs and Linux are being built. The
+        documentation is in the app, under
         <b>Docs</b>, and works offline. In return we'd like honest feedback,
         especially about anything it missed, through the issue tracker or by
         email.</p></details>
@@ -696,23 +778,28 @@
       manual redaction, tell us. If it misses something, definitely tell us.</p>
     <div class="dl">
       <div>
-        <h3>macOS <span class="pill g">Signed and notarized</span></h3>
-        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_aarch64.dmg">Download De&#8209;ID 0.4.3 for macOS</a>
+        <h3>macOS <span class="pill g">Latest · recommended</span></h3>
+        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.5.1/De-ID_0.5.1_aarch64.dmg">Download De&#8209;ID 0.5.1 for macOS</a>
         <div class="meta">
-          macOS 14 or later · Apple silicon (M1 or newer) · about 600 MB<br>
+          macOS 14 or later · Apple silicon (M1 or newer) · about 600 MB · signed and notarized<br>
           Not sure? Apple menu → About This Mac shows "Chip: Apple M…". Intel Macs aren't in this release.<br>
-          <span class="mono sha">SHA-256 8a852bac91c9c480be5df9367225c208437198ca6a0e9770d7ec95b10eff7f57</span>
+          <span class="mono sha">SHA-256 fd5481361ac0496c8f64ace069bef2d4afd6cd1a94a51160ce27cc931202a87d</span>
         </div>
         <ol>
           <li>Open the DMG and drag <b>De&#8209;ID</b> to Applications. It's notarized, so it opens like any other app.</li>
-          <li>The first launch takes up to a minute while the model loads. Nothing is downloaded; it's all in the app.</li>
-          <li>To update, do the same with a newer DMG. Your data folder is kept.</li>
+          <li>The first launch takes up to a minute while the model loads. Nothing is downloaded; it's all in the app.
+            macOS asks whether De&#8209;ID may send notifications, and macOS 26 may ask once whether it may read the
+            pasteboard, for Copy de-identified.</li>
+          <li>Updating from 0.4? Install over it. On first launch the data folder moves to its new name, and the
+            salt, crosswalk, runs and settings carry over.</li>
         </ol>
-        <p class="note">Your data lives in <span class="mono path">~/Library/Application Support/io.github.hantswilliams.deid/</span>. Keep FileVault on.</p>
+        <p class="note">Your data lives in <span class="mono path">~/Library/Application Support/app.deid.desktop/</span>. Keep FileVault on.</p>
       </div>
-      <div>
-        <h3>Windows <span class="pill w">Not signed yet</span></h3>
-        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Download De&#8209;ID 0.4.3 for Windows</a>
+      <div id="windows" class="older">
+        <h3>Windows <span class="pill n">Earlier version · 0.4.3</span> <span class="pill w">Not signed yet</span></h3>
+        <p class="meta lede">0.4.3 doesn't have what's new in 0.5: the clipboard round trip, the AI terminal, the
+          De&#8209;ID folder, Finder and the menu bar. The rest of this page applies, except audits.</p>
+        <a class="btn ghost" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Download De&#8209;ID 0.4.3 for Windows</a>
         <div class="meta">
           Windows 10 or 11 on Intel or AMD · Windows 11 on ARM (such as Snapdragon laptops) under emulation · about 480 MB<br>
           <span class="mono sha">SHA-256 22402e18d9a66caf7d89beea284d843463f867b0561165f0b0cc981554c68d18</span>
@@ -724,7 +811,6 @@
             <span class="mono">De-ID_0.4.3_x64-setup.exe</span>, then <b>Run anyway</b>.</li>
           <li>It installs for your account only and needs no administrator rights. Open <b>De&#8209;ID</b>
             from the Start menu; the first launch takes up to a minute.</li>
-          <li>To update, run a newer installer. Your data folder is kept.</li>
         </ol>
         <p class="note">On a work PC, IT may have turned off Run anyway; ask them to allow the installer.
         Your data lives in <span class="mono path">%LOCALAPPDATA%\io.github.hantswilliams.deid\</span>. Keep BitLocker on.</p>
@@ -734,8 +820,10 @@
       <p class="note">Either way: drop a folder in, and clean copies appear next to it in
         <span class="mono">&lt;folder&gt; (de-identified)/</span>. The data folder holds the
         cross-reference (as sensitive as your originals), run history and settings, which is
-        why the disk should be encrypted. Pilot build for testing ·
-        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.3">release notes</a></p>
+        why the disk should be encrypted. To update, install a newer version over the old one;
+        your data folder is kept. Pilot builds for testing · release notes for
+        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.5.1">macOS 0.5.1</a> and
+        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.3">Windows 0.4.3</a></p>
       <div class="links">
         <a class="btn ghost sm" href="https://github.com/hantswilliams/de-id-public/issues">Report a problem</a>
         <a class="btn ghost sm" href="mailto:hantsawilliams@gmail.com?subject=De-ID%20beta">Email feedback</a>
