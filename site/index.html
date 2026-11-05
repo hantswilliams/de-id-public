@@ -11,14 +11,16 @@
      anywhere, in keeping with the product it describes. The only links out are
      the download, the release notes and the issue tracker on GitHub.
      Remove the robots meta above, robots.txt and the X-Robots-Tag header in
-     _headers at public launch. Working name "De-ID" throughout. -->
+     _headers at public launch. Working name "De-ID" throughout.
+     OS marks: Apple and Linux (Tux) paths from Simple Icons (CC0); the
+     Windows mark is four squares drawn here. Defined once in the sprite
+     below <body>, used with <use href="#i-…">. -->
 <style>
   :root {
     --ink: #18181b; --muted: #71717a; --paper: #ffffff; --wash: #f7f7f8;
     --line: #e5e5e8; --accent: #4D7C0F; --accent-vivid: #65A30D; --accent-soft: #ECFCCB;
     --bar: #101012; --good: #15803d; --good-soft: #eaf4ee;
     --warn: #b45309; --warn-soft: #fbf0dc;
-    --bad: #b91c1c; --bad-soft: #fdecec;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -26,7 +28,6 @@
       --line: #27272a; --accent: #A3E635; --accent-vivid: #A3E635; --accent-soft: #1A2E05;
       --bar: #000000; --good: #34d399; --good-soft: #0c2419;
       --warn: #fbbf24; --warn-soft: #2a2110;
-      --bad: #f87171; --bad-soft: #2c1212;
     }
     :root:not([data-theme="light"]) .btn { color: #101012; }
     :root:not([data-theme="light"]) .btn.ghost { color: var(--ink); }
@@ -59,6 +60,13 @@
   .btn.ghost { background: transparent; color: var(--ink);
     border: 1px solid var(--line); }
   .btn.sm { padding: 9px 14px; font-size: 14px; }
+  .btn.os-btn { display: inline-flex; align-items: center; gap: 9px; }
+  .os { width: 1.15em; height: 1.15em; fill: currentColor; flex: none; }
+  .btn .tag { font-size: 10px; font-weight: 750; letter-spacing: .6px; text-transform: uppercase;
+    color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
+  .btn .sub { margin-left: auto; padding-left: 12px; font-size: 13px; font-weight: 500; opacity: .8; }
+  .btn.off { color: var(--muted); cursor: default; }
+  .btn.off:hover { filter: none; }
 
   .hero { padding: 56px 0 30px; display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
@@ -134,12 +142,19 @@
 
   .proof { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
   .proof .card { background: var(--paper); }
-  .proof .mono.big { display: block; font-size: 15px; color: var(--good);
-    margin-bottom: 8px; }
+  .proof .card b.t { color: var(--accent); margin-top: 0; }
 
   .tokenline { background: var(--bar); color: #e4e4e7; border-radius: 10px;
     padding: 18px 20px; font-size: 13.5px; line-height: 1.9; margin-top: 22px; }
   .tokenline .t { color: #BEF264; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .chip { font-size: 12.5px; font-weight: 600; color: var(--ink); background: var(--paper);
+    border: 1px solid var(--line); border-radius: 6px; padding: 3px 9px; }
+  .chip.any { font-weight: 500; color: var(--muted); border-style: dashed; }
+  .plats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+  .plats .pill { font-size: 10.5px; }
+  .plats .pill.n { color: var(--muted); font-weight: 700; }
+  .tokennote { color: var(--muted); max-width: 760px; margin: 12px 0 0; }
 
   /* the agent door: a chain of nodes */
   .chain { display: flex; align-items: stretch; gap: 10px; flex-wrap: wrap;
@@ -161,92 +176,6 @@
     color: var(--muted); line-height: 1.5; }
   td:first-child { color: var(--ink); }
 
-  /* The audit, simulated in CSS (the CSP allows no script): one 18 s loop.
-     Every element's own style is its final frame, so with reduced motion,
-     or no animation at all, the finished audit shows. */
-  .audit { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-    gap: 44px; align-items: center; margin-top: 52px; scroll-margin-top: 20px; }
-  .audit h3 { font-size: 22px; letter-spacing: -.6px; line-height: 1.25; margin-bottom: 12px; }
-  .audit .copy > p { color: var(--muted); font-size: 15px; margin: 0 0 12px; }
-  .audit ul { margin: 0; padding-left: 1.1em; color: var(--muted); font-size: 14.5px; }
-  .audit li { margin-bottom: 7px; }
-  .stage { position: relative; }
-  .term { position: relative; z-index: 2; width: 88%; background: var(--bar); color: #e4e4e7;
-    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
-    box-shadow: 0 18px 44px #00000033; font-size: 11.5px; line-height: 1.7; }
-  .term .tbar { display: flex; align-items: center; gap: 6px; padding: 8px 11px;
-    border-bottom: 1px solid #ffffff14; color: #a1a1aa; font-size: 11px; }
-  .term .tbar i { width: 9px; height: 9px; border-radius: 50%; background: #3f3f46; }
-  .term .tbar span { margin-left: 8px; }
-  .term .tbody { padding: 10px 13px 12px; }
-  .term .ln { white-space: pre-wrap; overflow-wrap: anywhere; }
-  .term .p { color: #BEF264; }
-  .term .dim { color: #a1a1aa; }
-  .cur { display: inline-block; width: .55em; height: 1.1em; background: #e4e4e7;
-    vertical-align: text-bottom; visibility: hidden;
-    animation: blink 1s steps(1) infinite, cur 18s infinite; }
-  .stage .panel { position: relative; z-index: 1; margin: -16px 0 0 9%; }
-  .stage .panel .bar3 { padding-top: 22px; }
-  .status { display: grid; font-size: 11.5px; color: var(--muted); margin: -4px 0 10px; }
-  .status > span { grid-area: 1 / 1; display: flex; align-items: center; gap: 7px; }
-  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
-  .dot.wait { background: var(--warn); }
-  .dot.live { background: var(--good); animation: pulse 1.6s ease-in-out infinite; }
-  .odo { height: 1.25em; line-height: 1.25em; overflow: hidden; }
-  .reel { display: block; font-style: normal; }
-  .reel em { font-style: normal; color: var(--bad); }
-  .reel em.ok { color: var(--good); }
-  .ev { background: var(--paper); border: 1px solid var(--line); border-radius: 8px;
-    padding: 7px 11px; margin-top: 6px; }
-  .ev .top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-  .ev .top b { font-size: 12.5px; }
-  .ev .path { color: var(--muted); font-size: 11px; overflow-wrap: anywhere; }
-  .ev .via { color: var(--bad); font-size: 10.5px; }
-  .ev.bad { border-color: var(--bad); }
-  .pill.r { color: var(--bad); background: var(--bad-soft); }
-  .panel .foot { margin-top: 10px; color: var(--muted); font-size: 11px; }
-  .panel .foot b { color: var(--good); }
-
-  .s-wait { opacity: 0; animation: s-wait 18s infinite; }
-  .s-run { animation: s-run 18s infinite; }
-  .st-check { transform: translateY(-2.5em); animation: st-check 18s infinite; }
-  .st-reads { transform: translateY(-6.25em); animation: st-reads 18s infinite; }
-  .st-flags { transform: translateY(-2.5em); animation: st-flags 18s infinite; }
-  .t2 { animation: in3 18s infinite; }
-  .t3 { animation: in13 18s infinite; }
-  .e1 { animation: in25 18s infinite; }
-  .e2 { animation: in31 18s infinite; }
-  .e3 { animation: in37 18s infinite; }
-  .e4 { animation: in44 18s infinite, flash 18s infinite; }
-  .e5 { animation: in54 18s infinite; }
-  .e6 { animation: in61 18s infinite; }
-
-  @keyframes blink { 50% { opacity: 0; } }
-  @keyframes pulse { 50% { opacity: .3; } }
-  @keyframes cur { 0%, 13% { visibility: visible; } 13.5%, 100% { visibility: hidden; } }
-  @keyframes s-wait { 0%, 14% { opacity: 1; } 15%, 100% { opacity: 0; } }
-  @keyframes s-run { 0%, 14% { opacity: 0; } 15%, 100% { opacity: 1; } }
-  @keyframes st-check { 0%, 14.4% { transform: none; } 15%, 21% { transform: translateY(-1.25em); }
-    21.6%, 100% { transform: translateY(-2.5em); } }
-  @keyframes st-reads { 0%, 25.6% { transform: none; } 26.2%, 31.1% { transform: translateY(-1.25em); }
-    31.7%, 36.7% { transform: translateY(-2.5em); } 37.3%, 44.4% { transform: translateY(-3.75em); }
-    45%, 54.4% { transform: translateY(-5em); } 55%, 100% { transform: translateY(-6.25em); } }
-  @keyframes st-flags { 0%, 44.4% { transform: none; } 45%, 54.4% { transform: translateY(-1.25em); }
-    55%, 100% { transform: translateY(-2.5em); } }
-  @keyframes in3  { 0%, 3.3%  { opacity: 0; transform: translateY(4px); } 4.8%, 92%  { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in13 { 0%, 13.3% { opacity: 0; transform: translateY(4px); } 14.8%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in25 { 0%, 25.6% { opacity: 0; transform: translateY(6px); } 27.1%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in31 { 0%, 31.1% { opacity: 0; transform: translateY(6px); } 32.6%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in37 { 0%, 36.7% { opacity: 0; transform: translateY(6px); } 38.2%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in44 { 0%, 44.4% { opacity: 0; transform: translateY(6px); } 45.9%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in54 { 0%, 54.4% { opacity: 0; transform: translateY(6px); } 55.9%, 92% { opacity: 1; transform: none; } 97%, 100% { opacity: 0; } }
-  @keyframes in61 { 0%, 61.1% { opacity: 0; } 62.6%, 92% { opacity: 1; } 97%, 100% { opacity: 0; } }
-  @keyframes flash { 0%, 45% { box-shadow: 0 0 0 0 transparent; }
-    47% { box-shadow: 0 0 0 5px var(--bad-soft); } 53%, 100% { box-shadow: 0 0 0 0 transparent; } }
-  @media (prefers-reduced-motion: reduce) {
-    .stage *, .stage *::after { animation: none !important; }
-  }
-
   .faq { max-width: 720px; }
   .faq details { border-top: 1px solid var(--line); padding: 4px 0; }
   .faq details:last-child { border-bottom: 1px solid var(--line); }
@@ -254,13 +183,20 @@
   .faq p { margin: 0 0 16px; color: var(--muted); }
 
   /* download */
-  .dl { background: var(--wash); border: 1px solid var(--line); border-radius: 14px;
-    padding: 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
-  .dl .older { scroll-margin-top: 20px; }
-  .dl .older .lede { margin: 0 0 14px; }
+  .dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+  .plat { background: var(--wash); border: 1px solid var(--line); border-radius: 14px;
+    padding: 26px; scroll-margin-top: 20px; }
+  .plat.rec { border-color: var(--accent-vivid); }
+  .plat.soon { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center;
+    gap: 12px 26px; padding: 20px 26px; }
+  .plat.soon h3 { margin: 0; }
+  .plat.soon .lede { flex: 1 1 380px; margin: 0; }
+  .plat.soon .note { flex-basis: 100%; margin: 0; }
+  .dl .lede { margin: 0 0 14px; }
   .dl h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .dl h3 .os { width: 20px; height: 20px; }
+  .dlbtns { display: grid; gap: 8px; }
   .dl .meta { font-size: 13.5px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-  .dl .sha { word-break: break-all; font-size: 12px; }
   .dl .path { overflow-wrap: anywhere; }
   .dl ol { margin: 14px 0 0; padding-left: 1.2em; font-size: 14.5px; color: var(--muted); }
   .dl li { margin-bottom: 6px; }
@@ -285,24 +221,27 @@
     .chain { flex-direction: column; }
     .node { flex: 0 0 auto; }
     .arrow { transform: rotate(90deg); align-self: flex-start; margin-left: 12px; }
-    .audit { grid-template-columns: 1fr; gap: 28px; }
-    .term { width: 100%; }
-    .stage .panel { margin: 10px 0 0; }
-    .stage .panel .bar3 { padding-top: 11px; }
   }
   @media (max-width: 560px) {
+    .dlbtns .btn { flex-wrap: wrap; row-gap: 0; }
+    .dlbtns .btn .sub { margin-left: 0; padding-left: 0; flex-basis: 100%; }
     .grid4 { grid-template-columns: 1fr; }
     nav .btn.ghost { display: none; }
   }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-apple" viewBox="0 0 24 24"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></symbol>
+  <symbol id="i-windows" viewBox="0 0 24 24"><path d="M1 1h10.5v10.5H1zM12.5 1H23v10.5H12.5zM1 12.5h10.5V23H1zM12.5 12.5H23V23H12.5z"/></symbol>
+  <symbol id="i-linux" viewBox="0 0 24 24"><path d="M12.504 0q-.232 0-.48.021c-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.4.4 0 0 0-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071s1.592-.536 2.257-1.306c.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.36.36 0 0 0-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139m.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105l-.004-.021-.004-.024a1.8 1.8 0 0 1-.15.706.95.95 0 0 1-.213.335 1 1 0 0 0-.088-.042c-.104-.045-.198-.064-.284-.133a1.3 1.3 0 0 0-.22-.066c.05-.06.146-.133.183-.198q.08-.193.088-.402v-.02a1.2 1.2 0 0 0-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 0 0-.205.334 1.2 1.2 0 0 0-.09.4v.019q.002.134.02.267c-.193-.067-.438-.135-.607-.202a2 2 0 0 1-.018-.2v-.02a1.8 1.8 0 0 1 .15-.768 1.08 1.08 0 0 1 .43-.533 1 1 0 0 1 .594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2q.018-.136.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.6.6 0 0 0-.166-.267.25.25 0 0 0-.183-.064h-.021c-.071.006-.13.04-.186.132a.55.55 0 0 0-.12.27 1 1 0 0 0-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268q.014.014.034.024c-.07.057-.117.07-.176.136a.3.3 0 0 1-.131.068 2.6 2.6 0 0 1-.275-.402 1.8 1.8 0 0 1-.155-.667 1.8 1.8 0 0 1 .08-.668 1.4 1.4 0 0 1 .283-.535c.128-.133.26-.2.418-.2m1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.57.57 0 0 1 .016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.1 1.1 0 0 1-.448-.067 4 4 0 0 1-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71q-.104-.403.193-.6c.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.7 2.7 0 0 0-.402-.533 1.5 1.5 0 0 0-.275-.333c.182 0 .338-.03.465-.067a.62.62 0 0 0 .314-.334c.108-.267 0-.697-.345-1.163s-.931-.995-1.788-1.521c-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.1 8.1 0 0 1 .647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335q.058.005.11.006c.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01q.08 0 .157.014c.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602q-.553-.1-.723-.4c-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336m7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8 8 0 0 1-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065m-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z"/></symbol>
+</svg>
 
 <div class="wrap">
   <header>
     <div class="logo" aria-label="De-ID">
       <span><span>De</span><span class="lbar"></span><span class="lid">ID</span></span>
-      <span class="beta">BETA 0.5.1</span>
+      <span class="beta">BETA 0.7.8</span>
     </div>
     <nav>
       <a class="btn ghost sm" href="#agents">For AI agents</a>
@@ -320,11 +259,11 @@
         in the answer, or run Claude Code with what you type de-identified
         first.</p>
       <div class="cta">
-        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.5.1/De-ID_0.5.1_aarch64.dmg">Download for macOS</a>
-        <a class="btn ghost" href="#windows">Windows (0.4.3)</a>
-        <span class="small">Beta 0.5.1 · macOS 14 or later on Apple silicon · signed and notarized ·
-          <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.5.1">release notes</a>.
-          Windows has the earlier 0.4.3, without what's new in 0.5.</span>
+        <a class="btn os-btn" href="#mac"><svg class="os" aria-hidden="true"><use href="#i-apple"/></svg>macOS</a>
+        <a class="btn ghost os-btn" href="#windows"><svg class="os" aria-hidden="true"><use href="#i-windows"/></svg>Windows</a>
+        <a class="btn ghost os-btn" href="#linux"><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux <span class="tag">Soon</span></a>
+        <span class="small">Beta 0.7.8 for macOS 14 or later, Apple silicon and Intel, signed and notarized ·
+          <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">release notes</a>. Windows has the earlier 0.4.3, and Linux is on its way.</span>
       </div>
     </div>
     <div class="mock" role="img" aria-label="The app after a run: identifiers and faces removed, files marked clean or needing review, sharing with agents off">
@@ -372,8 +311,9 @@
         <p>Every output is re-read, and a file that still looks like it contains an
         identifier is never saved. The app points you at the pages to check and
         shows originals and clean copies side by side.</p>
-        <p>Missed something? Select the text and remove it everywhere in the run,
-        or drag a box over a face or a signature and black it out. Undo takes it back.</p></div>
+        <p>Missed something? Mark it to remove, in every file of the run or just
+        this one, or drag a box over a face or a signature. Changes wait where you
+        can see them, and one <b>Apply</b> processes each file once.</p></div>
       <div class="card"><div class="head"><span class="n">3</span><b class="t">Use it</b></div>
         <p>Clean copies land next to your originals. One switch adds a
         <span class="mono">(for AI)</span> folder with Markdown, CSV, one
@@ -386,21 +326,24 @@
         and every read is logged.</p>
         <p class="note">On Mac and Windows. <a href="#agents">How it works ↓</a></p></div>
     </div>
-    <div class="tokenline mono">Candidate: <span class="t">&lt;PERSON_7f3a2c&gt;</span> · <span class="t">&lt;EMAIL_ADDRESS_57898c&gt;</span> · <span class="t">&lt;PHONE_NUMBER_b3179c&gt;</span><br>The same person gets the same token across the whole run, in the text and in the black boxes on the page.</div>
+    <div class="tokenline mono">Candidate: <span class="t">&lt;PERSON_7f3a2c&gt;</span> · <span class="t">&lt;EMAIL_ADDRESS_57898c&gt;</span> · <span class="t">&lt;PHONE_NUMBER_b3179c&gt;</span></div>
+    <p class="tokennote">The same person gets the same token across the whole run, in the text and in the
+      black boxes on the page. Add a list of people (a roster, a feeder report) and each person keeps one
+      token in every file and table, and a file named after someone comes back named by their token.</p>
   </section>
 
   <section id="ai">
-    <div class="kicker">New in 0.5 · Mac</div>
+    <div class="kicker">Everyday AI</div>
     <h2>Use any AI. Leave the names behind.</h2>
     <p class="lead">De&#8209;ID now works where the text already is: the clipboard, a
-      terminal, a folder and Finder. What an AI sees has the names taken out on
-      your Mac first, and what comes back can have them put back, on your screen
-      only.</p>
-    <div class="chain" role="img" aria-label="You copy a request that names Omar Reyes and gives his email address. After pressing Command-C twice, the AI gets the same request with a person token and an email token instead. Restore names on the AI's answer puts Omar Reyes back, marked.">
+      terminal, a folder and your file manager. What an AI sees has the names taken
+      out on your computer first, and what comes back can have them put back, on
+      your screen only.</p>
+    <div class="chain" role="img" aria-label="You copy a request that names Omar Reyes and gives his email address. After copying twice (Command-C on a Mac, Control-C on Windows), the AI gets the same request with a person token and an email token instead. Restore names on the AI's answer puts Omar Reyes back, marked.">
       <div class="node"><b>You copy</b><span class="mono">Summarise Omar Reyes's appeal and
         draft a reply to omar.reyes@example.com.</span></div>
       <div class="arrow">→</div>
-      <div class="node hot"><b>⌘C twice: the AI gets</b><span class="mono">Summarise
+      <div class="node hot"><b>Copy twice: the AI gets</b><span class="mono">Summarise
         <span class="tok">&lt;PERSON_4f2a1c&gt;</span>'s appeal and draft a reply to
         <span class="tok">&lt;EMAIL_ADDRESS_9b1d07&gt;</span>.</span></div>
       <div class="arrow">→</div>
@@ -409,7 +352,8 @@
     </div>
     <div class="grid2">
       <div class="card"><b class="t">Copy de-identified, Restore names</b>
-        <p>Select text anywhere, hold ⌘ and press C twice quickly. The clipboard
+        <p>Select text anywhere, then hold ⌘ (Ctrl on Windows) and press C twice
+        quickly. The clipboard
         now holds it with names, emails, phone numbers and IDs swapped for tokens,
         and a notification says what was replaced. Paste it into ChatGPT, Claude or
         any chat: the same person keeps the same token for the whole conversation,
@@ -429,24 +373,58 @@
         only its session folder to read.</p></div>
       <div class="card"><b class="t">The De&#8209;ID folder</b>
         <p>Turn it on in Settings, and anything dropped into
-        <span class="mono">~/de-id/to-deidentify</span> is cleaned with your
-        defaults, even with the window closed. Clean copies land in
-        <span class="mono">~/de-id/deidentified</span> (those to review in
+        <span class="mono">de-id/to-deidentify</span>, in your home folder, is
+        cleaned with your defaults, even with the window closed. Clean copies land
+        in <span class="mono">de-id/deidentified</span> (those to review in
         <span class="mono">needs-review</span>), and the originals move to
         <span class="mono">done</span>. On battery, files wait until you plug
         in.</p></div>
-      <div class="card"><b class="t">From Finder and the menu bar</b>
+      <div class="card"><b class="t">From Finder or Explorer</b>
         <p>Right-click files or a folder → <b>De-identify with De&#8209;ID</b> to
         clean them with your defaults, or <b>Open With → De&#8209;ID</b> to choose
-        how. Close the window and De&#8209;ID stays in the menu bar: runs carry on,
-        a notification says when each ends, and <b>Open at login</b> starts it
-        with just the icon.</p></div>
+        how. Close the window and De&#8209;ID stays in the menu bar (the
+        notification area on Windows): runs carry on, a notification says when
+        each ends, and <b>Open at login</b> starts it with just the icon.</p></div>
     </div>
-    <p class="note">Mac only; the Windows version is still 0.4.3. De&#8209;ID itself
+    <p class="note"><b>Coming to Windows in the next release.</b> Today's Windows
+      download is 0.4.3. De&#8209;ID itself
       connects to nothing: a chat or a command-line tool makes its own connections,
       as it always would, and what it gets from De&#8209;ID is the de-identified
       version. Which name a token stands for stays in De&#8209;ID's data folder for
       30 days after a conversation's last use.</p>
+  </section>
+
+  <section id="works">
+    <div class="kicker">Works with</div>
+    <h2>The AI tools you already use.</h2>
+    <p class="lead">Four ways in, from any chat to a model on your own computer.
+      Whichever you use, what the AI gets is the de-identified version.</p>
+    <div class="grid2">
+      <div class="card"><b class="t">Copy and restore</b>
+        <p>Any AI chat, in a browser or an app: copy twice, paste, and copy the
+        answer back.</p>
+        <div class="chips"><span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Gemini</span><span class="chip any">any AI chat</span></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill n">Windows: next release</span></div></div>
+      <div class="card"><b class="t">The AI terminal</b>
+        <p>Command-line AI tools, run inside De&#8209;ID with what you type and
+        paste cleaned first.</p>
+        <div class="chips"><span class="chip">Claude Code</span><span class="chip">Codex</span><span class="chip">Gemini CLI</span><span class="chip">Antigravity</span><span class="chip">OpenCode</span><span class="chip">Aider</span><span class="chip any">any command you add</span></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill n">Windows: next release</span></div></div>
+      <div class="card"><b class="t">De&#8209;ID's read-only tool</b>
+        <p>Agents list, read and search the runs you share, through MCP, and every
+        read is logged. <a href="#agents">How ↓</a></p>
+        <div class="chips"><span class="chip">Claude Code</span><span class="chip">Claude Desktop</span><span class="chip">Copilot in VS Code</span></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span></div></div>
+      <div class="card"><b class="t">Files for AI</b>
+        <p>A folder of Markdown and CSV with a read-me for the model. With a local
+        model, nothing leaves the computer at all.</p>
+        <div class="chips"><span class="chip any">any tool that reads files</span><span class="chip any">a local model</span></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span></div></div>
+    </div>
+    <p class="note">ChatGPT's desktop app can't use De&#8209;ID's read-only tool: it
+      connects only to tools hosted on the internet. With ChatGPT, use Copy and
+      restore or Files for AI. Product names belong to their owners; De&#8209;ID
+      isn't affiliated with or endorsed by them.</p>
   </section>
 
   <section id="trust">
@@ -456,7 +434,7 @@
       tests itself, tells you where it might be wrong, and lets you check what it
       did.</p>
     <div class="proof">
-      <div class="card"><span class="mono big">cloud calls: 0</span>
+      <div class="card">
         <b class="t">Everything stays on your machine</b>
         <p>De-identification runs entirely on your computer. De&#8209;ID never sends
         your files or text anywhere, and no remote model helps decide what to
@@ -465,7 +443,7 @@
         blocked, including the agents' tool, the Claude Code hook and the OCR
         workers as their own processes, and it ships only if nothing ever tried
         to connect.</p></div>
-      <div class="card"><span class="mono big">under the boxes: nothing</span>
+      <div class="card">
         <b class="t">Redacted means deleted</b>
         <p>The text under a black box is deleted from the PDF, not covered, so
         copying, searching or extracting finds nothing there. What a PDF keeps
@@ -474,19 +452,24 @@
         outside links are left out. Hidden picture data goes from every image.</p>
         <p>The second read checks all of those places, and the report counts
         what came out, never what it said.</p></div>
-      <div class="card"><span class="mono big">second read: clean</span>
+      <div class="card">
         <b class="t">Every file is read twice</b>
         <p>The first read finds and removes identifiers. The second goes over the
         clean copy looking for anything that slipped through, including the names
         you added. If it finds something, the file isn't saved. Scanned pages are
         read again at a higher resolution, and handwritten signatures are burned
-        out.</p></div>
-      <div class="card"><span class="mono big">to review: 1 page</span>
-        <b class="t">Human in the loop when needed</b>
+        out. A name found on one page of a PDF is removed on every page, and text
+        drawn sideways, mirrored or upside down is read the right way round.</p></div>
+      <div class="card">
+        <b class="t">A person checks, and it's scored</b>
         <p>No tool catches everything. A page the app couldn't read, a page with
-        little on it beyond dates and places, and every photo are flagged and
-        linked so a person makes the call.</p></div>
-      <div class="card"><span class="mono big">repeat-check: identical</span>
+        little on it beyond dates and places, and every photo are flagged so a
+        person makes the call.</p>
+        <p><b>Audit this run</b> draws pages at random for a spot check. Mark what
+        slipped through in the clean copy, or mark the original from scratch and
+        compare word by word. The score is counts first, and the misses become
+        fixes in one go.</p></div>
+      <div class="card">
         <b class="t">The same result every run</b>
         <p>Run the same files again and the outputs are identical, byte for byte.
         An auditor can re-run a job and compare; a reviewer can trust that what
@@ -494,13 +477,13 @@
         <p>Each run's History lists every step: who, when, which file. Find a
         file traces a <span class="mono">FILE-</span> label back to its run and
         original.</p></div>
-      <div class="card"><span class="mono big">audit: 0 flags</span>
+      <div class="card">
         <b class="t">See who actually opened what</b>
         <p>For a window you choose, the app watches your folders with macOS's own
         event log, lists every program that opened a file in them, and flags any
         AI agent that read an original. Then you don't have to take the tool's
         word for it either.</p>
-        <p class="note">Mac only for now; Windows audits are planned. <a href="#audit">Watch one run ↓</a></p></div>
+        <p class="note">Mac only for now; Windows audits are planned.</p></div>
     </div>
   </section>
 
@@ -510,7 +493,8 @@
     <p class="lead">Coding agents on your own computer are the new way sensitive
       documents leak. De&#8209;ID gives Claude Code, Claude Desktop and Copilot in VS
       Code one read-only way in: the de-identified copies of the runs you choose
-      to share, and nothing else. It works the same on Mac and Windows.</p>
+      to share (on a Mac, the De&#8209;ID folder too), and nothing else. It works the
+      same on Mac and Windows.</p>
     <div class="chain" role="img" aria-label="An AI agent calls De-ID's read-only tool, which reaches the app's service with its own token, which serves only the shared de-identified runs and writes an activity log. A hook blocks Claude Code from reading the originals.">
       <div class="node"><b>Your AI agent</b><span>Claude Code · Claude Desktop · Copilot in VS Code</span></div>
       <div class="arrow">→</div>
@@ -548,67 +532,6 @@
       </div>
     </div>
 
-    <div class="audit" id="audit">
-      <div class="copy">
-        <h3>Watch the folders, not just the door.</h3>
-        <p>De&#8209;ID's tool and hook only see what goes through them. An audit
-        asks macOS instead: for a window you choose, Apple's own
-        <span class="mono">eslogger</span> reports every program that opens a file
-        in the folders you watch. De&#8209;ID traces each read up its chain of
-        programs to an app, and flags any AI agent that read an original.</p>
-        <ul>
-          <li>Start it from <b>Agent activity</b>, then type your password in
-          Terminal, at macOS's own <span class="mono">sudo</span> prompt.
-          De&#8209;ID never sees it.</li>
-          <li>Only opens in the watched folders are kept, and never what a
-          program was run with.</li>
-          <li>Each audit proves itself first. If De&#8209;ID can't see its own test
-          opens come back within 15 seconds, the audit is marked not valid
-          rather than reporting a reassuring zero.</li>
-        </ul>
-        <p class="note">Mac only for now, and Terminal needs Full Disk Access. In
-        testing, <span class="mono">eslogger</span> used about 3% of one core.</p>
-      </div>
-
-      <div class="stage" role="img" aria-label="A simulated audit. In Terminal, the eslogger command runs under sudo and asks for a password. De-ID's Agent activity panel switches to Audit running, passes its self-check, and lists programs as they open files in a watched folder: Finder, Spotlight and Preview are fine; Claude Code reading an original, through cat started by a shell started by claude, is flagged red; VS Code's extension host is flagged amber.">
-        <div class="term">
-          <div class="tbar"><i></i><i></i><i></i><span>Terminal · De&#8209;ID audit</span></div>
-          <div class="tbody mono">
-            <div class="ln"><span class="p">$</span> sudo /bin/sh -c '… eslogger open exec fork exit …'</div>
-            <div class="ln t2">Password: <span class="cur"></span></div>
-            <div class="ln t3 dim">Audit running. Close this tab to stop.</div>
-          </div>
-        </div>
-        <div class="mock panel">
-          <div class="bar3"><i></i><i></i><i></i></div>
-          <div class="pad">
-            <h4>Agent activity <span style="color:var(--muted);font-weight:400">· Audit</span></h4>
-            <div class="status">
-              <span class="s-wait"><i class="dot wait"></i> Waiting for Terminal…</span>
-              <span class="s-run"><i class="dot live"></i> Audit running · 2 folders · 1 hour</span>
-            </div>
-            <div class="tiles">
-              <div class="tile"><b class="odo"><i class="reel st-check">–<br>…<br><em class="ok">✓</em></i></b><span>self-check</span></div>
-              <div class="tile"><b class="odo"><i class="reel st-reads">0<br>1<br>4<br>5<br>6<br>7</i></b><span>reads kept</span></div>
-              <div class="tile"><b class="odo"><i class="reel st-flags">0<br><em>1</em><br><em>2</em></i></b><span>flags</span></div>
-              <div class="tile"><b>3%</b><span>eslogger CPU</span></div>
-            </div>
-            <div class="ev e1"><div class="top"><b>Finder</b><span class="pill n">You</span></div>
-              <div class="path mono">10:02:14 · 2026 packets › Lee_scanned_letter.pdf</div></div>
-            <div class="ev e2"><div class="top"><b>Spotlight</b><span class="pill n">System</span></div>
-              <div class="path mono">10:02:15 · 2026 packets › Abbott_note.txt · ×3</div></div>
-            <div class="ev e3"><div class="top"><b>Preview</b><span class="pill n">Editor</span></div>
-              <div class="path mono">10:02:31 · 2026 packets › Reyes_passport_copy.jpg</div></div>
-            <div class="ev e4 bad"><div class="top"><b>Claude Code</b><span class="pill r">AI agent read an original</span></div>
-              <div class="path mono">10:02:47 · 2026 packets › Lee_scanned_letter.pdf</div>
-              <div class="via mono">cat ← zsh ← claude ← VS Code</div></div>
-            <div class="ev e5"><div class="top"><b>VS Code extension host</b><span class="pill w">Extension</span></div>
-              <div class="path mono">10:03:02 · 2026 packets › Abbott_note.txt</div></div>
-            <div class="foot e6"><b>✓ Valid audit:</b> De&#8209;ID saw its own test opens come back.</div>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <section id="standards">
@@ -673,7 +596,8 @@
         machines.</p></div>
       <div class="card"><b class="t">Anyone pasting into an AI chat</b>
         <p>Staff who already paste emails and case notes into ChatGPT or Claude.
-        Press ⌘C twice and the names come out first; copy the answer the same way
+        Copy twice (⌘C on a Mac, Ctrl+C on Windows) and the names come out first;
+        copy the answer the same way
         and they go back in. <a href="#ai">How ↑</a></p></div>
     </div>
   </section>
@@ -692,7 +616,7 @@
         the AI terminal, that service gets what you give it, as it always would.
         De&#8209;ID's job is to make that the version without the names.</p></details>
       <details><summary>Where does the link between a token and a name live?</summary>
-        <p>On your Mac only, in De&#8209;ID's data folder, like the crosswalk.
+        <p>On your computer only, in De&#8209;ID's data folder, like the crosswalk.
         <b>Copy and restore</b>, in the sidebar, lists each conversation with its
         copies and restores as counts, never the text, with <b>Forget</b> for each.
         A conversation's tokens are kept for 30 days after its last use. The AI
@@ -701,7 +625,9 @@
         <p>Names; street addresses and PO boxes; email addresses and phone numbers;
         SSNs, ITINs and EINs, including masked ones; student and record IDs; bank,
         routing and card numbers; driver's licence and passport numbers; IP
-        addresses and URLs; dates and places; and race and ethnicity terms. You
+        addresses and URLs; dates and places; citizenship; and race and ethnicity
+        terms. A year or a term on its own ("2026", "Fall 2026") stays, as Safe
+        Harbor allows; a date with a month or a day goes whole. You
         can untick any of them for a run. Labelled IDs (MRN, member, policy),
         ages over 89, ZIP codes on their own, organisations, places of birth and
         national origin terms are off unless you or a standard turn them on.
@@ -743,7 +669,11 @@
         out as redacted PDFs, clean Markdown, or both; photos come back upright as
         the cleaned picture plus their text. Handwriting, HEIC pictures, email
         files and audio aren't read, and a file attached inside a PDF is left out
-        rather than cleaned.</p></details>
+        rather than cleaned.</p>
+        <p>Spreadsheets: every sheet of a workbook, <span class="mono">.xlsm</span>
+        workbooks for their values (a macro is never run), and tables up to 100 MB,
+        a few hundred thousand rows, in minutes. A column of IDs is replaced whole,
+        and Review shows a table as a table.</p></details>
       <details><summary>What happens to the mapping back to the originals?</summary>
         <p>It stays on your machine in a separate cross-reference that only
         leaves if you export it yourself. Shared reports and agents refer to files
@@ -755,15 +685,20 @@
         file isn't commonly downloaded; choose <b>Keep</b>. On a work PC, IT may
         have turned Run anyway off, so ask them to allow it. The Mac version is
         signed and notarized, so it opens without a warning.</p></details>
+      <details><summary>Can several people use it on one computer?</summary>
+        <p>Yes, each in their own account on it. There's no De&#8209;ID login: the
+        account is the login. Each one has its own data folder, readable only by
+        that account, its own tokens and its own copy of the app running. An
+        account several people share isn't supported.</p></details>
       <details><summary>Can it show our organisation's name and logo?</summary>
         <p>Yes. Add them in Settings → Your organisation, and choose whether the
         sidebar shows no logo, De&#8209;ID's, yours, or both. Yours also heads the
         run report and the Agent activity PDF. It never goes into a de-identified
         file or Files for AI.</p></details>
       <details><summary>What do I get during the beta, and what do you want back?</summary>
-        <p>The full app, free: 0.5.1 on macOS (Apple silicon), and the earlier
-        0.4.3 on Windows, without the clipboard, the AI terminal, the De&#8209;ID
-        folder or Finder. Intel Macs and Linux are being built. The
+        <p>The full app, free: 0.7.8 on macOS (Apple silicon and Intel), and the
+        earlier 0.4.3 on Windows, without the clipboard, the AI terminal, the
+        De&#8209;ID folder or Finder. Linux is being tested. The
         documentation is in the app, under
         <b>Docs</b>, and works offline. In return we'd like honest feedback,
         especially about anything it missed, through the issue tracker or by
@@ -777,13 +712,15 @@
     <p class="lead">That's the whole ask. If it saves your team an afternoon of
       manual redaction, tell us. If it misses something, definitely tell us.</p>
     <div class="dl">
-      <div>
-        <h3>macOS <span class="pill g">Latest · recommended</span></h3>
-        <a class="btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.5.1/De-ID_0.5.1_aarch64.dmg">Download De&#8209;ID 0.5.1 for macOS</a>
+      <div class="plat rec" id="mac">
+        <h3><svg class="os" aria-hidden="true"><use href="#i-apple"/></svg>macOS <span class="pill g">Latest · recommended</span></h3>
+        <div class="dlbtns">
+          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_aarch64.dmg">Apple silicon<span class="sub">M1 or newer</span></a>
+          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_x64.dmg">Intel<span class="sub">Intel processor</span></a>
+        </div>
         <div class="meta">
-          macOS 14 or later · Apple silicon (M1 or newer) · about 600 MB · signed and notarized<br>
-          Not sure? Apple menu → About This Mac shows "Chip: Apple M…". Intel Macs aren't in this release.<br>
-          <span class="mono sha">SHA-256 fd5481361ac0496c8f64ace069bef2d4afd6cd1a94a51160ce27cc931202a87d</span>
+          Which one? Apple menu → About This Mac shows "Chip: Apple M…" for Apple silicon, or "Processor: … Intel …" for Intel.<br>
+          0.7.8 · macOS 14 or later · about 600 MB · signed and notarized
         </div>
         <ol>
           <li>Open the DMG and drag <b>De&#8209;ID</b> to Applications. It's notarized, so it opens like any other app.</li>
@@ -795,14 +732,16 @@
         </ol>
         <p class="note">Your data lives in <span class="mono path">~/Library/Application Support/app.deid.desktop/</span>. Keep FileVault on.</p>
       </div>
-      <div id="windows" class="older">
-        <h3>Windows <span class="pill n">Earlier version · 0.4.3</span> <span class="pill w">Not signed yet</span></h3>
-        <p class="meta lede">0.4.3 doesn't have what's new in 0.5: the clipboard round trip, the AI terminal, the
-          De&#8209;ID folder, Finder and the menu bar. The rest of this page applies, except audits.</p>
-        <a class="btn ghost" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Download De&#8209;ID 0.4.3 for Windows</a>
+      <div class="plat" id="windows">
+        <h3><svg class="os" aria-hidden="true"><use href="#i-windows"/></svg>Windows <span class="pill n">Earlier version · 0.4.3</span> <span class="pill w">Not signed yet</span></h3>
+        <p class="meta lede">One installer for every Windows PC: it runs natively on Intel and AMD, and on ARM
+          PCs such as Snapdragon laptops under Windows 11's built-in emulation. It's the earlier 0.4.3, without
+          what's new since 0.5 and without audits.</p>
+        <div class="dlbtns">
+          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Download for Windows<span class="sub">x64 and ARM</span></a>
+        </div>
         <div class="meta">
-          Windows 10 or 11 on Intel or AMD · Windows 11 on ARM (such as Snapdragon laptops) under emulation · about 480 MB<br>
-          <span class="mono sha">SHA-256 22402e18d9a66caf7d89beea284d843463f867b0561165f0b0cc981554c68d18</span>
+          Windows 10 or 11 on Intel or AMD · Windows 11 on ARM · about 480 MB
         </div>
         <ol>
           <li>If your browser says the file isn't commonly downloaded, choose <b>Keep</b>.</li>
@@ -815,6 +754,14 @@
         <p class="note">On a work PC, IT may have turned off Run anyway; ask them to allow the installer.
         Your data lives in <span class="mono path">%LOCALAPPDATA%\io.github.hantswilliams.deid\</span>. Keep BitLocker on.</p>
       </div>
+      <div class="plat soon" id="linux">
+        <h3><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux <span class="pill n">Coming soon</span></h3>
+        <p class="meta lede">The packages are built and being tested: a <span class="mono">.deb</span> for Ubuntu 22.04+
+          and Debian 12+, and an <span class="mono">.rpm</span> for Fedora 36+ and RHEL, Rocky and Alma 10, each for
+          Intel/AMD and ARM.</p>
+        <span class="btn ghost os-btn off" aria-disabled="true"><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Not available yet</span>
+        <p class="note">Want it on Linux first? <a href="mailto:hantsawilliams@gmail.com?subject=De-ID%20on%20Linux">Tell us your distribution</a>.</p>
+      </div>
     </div>
     <div class="dl-foot">
       <p class="note">Either way: drop a folder in, and clean copies appear next to it in
@@ -822,8 +769,9 @@
         cross-reference (as sensitive as your originals), run history and settings, which is
         why the disk should be encrypted. To update, install a newer version over the old one;
         your data folder is kept. Pilot builds for testing · release notes for
-        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.5.1">macOS 0.5.1</a> and
-        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.3">Windows 0.4.3</a></p>
+        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">macOS 0.7.8</a> and
+        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.3">Windows 0.4.3</a>.
+        Checksums for each file are in the release notes.</p>
       <div class="links">
         <a class="btn ghost sm" href="https://github.com/hantswilliams/de-id-public/issues">Report a problem</a>
         <a class="btn ghost sm" href="mailto:hantsawilliams@gmail.com?subject=De-ID%20beta">Email feedback</a>
