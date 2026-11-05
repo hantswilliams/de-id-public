@@ -2,7 +2,7 @@
 # One-time setup: Settings → Pages → Build and deployment → Source: "GitHub Actions".
 # The site is plain HTML; there is no build step. Before uploading, the check
 # step fails the deploy if any page references a script, stylesheet, font or
-# image from outside the site, so the page can never quietly stop being
+# image from outside the site (its own img/ is fine), so the page can never quietly stop being
 # self-contained. Links (<a href>) to GitHub are fine; fetches are not.
 name: Deploy site
 
@@ -38,8 +38,9 @@ jobs:
           set -euo pipefail
           bad=0
           for f in site/*.html; do
-            # any <script>, any src= fetch, any <link> to another host, any CSS url()/@import to another host
-            if grep -nE '<script|[[:space:]]src="|<link[^>]*href="https?:|url\(https?:|@import' "$f"; then
+            # any <script>, any src/srcset from another host, any <link> to another host,
+            # any CSS url()/@import to another host. The site's own images (img/) are fine.
+            if grep -nE '<script|[[:space:]](src|srcset)="(https?:)?//|<link[^>]*href="https?:|url\(https?:|@import' "$f"; then
               echo "::error file=$f::$f references a script or an external resource"; bad=1
             fi
           done

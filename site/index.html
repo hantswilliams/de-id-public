@@ -13,12 +13,13 @@
      Remove the robots meta above, robots.txt and the X-Robots-Tag header in
      _headers at public launch. Working name "De-ID" throughout.
      OS marks: Apple and Linux (Tux) paths from Simple Icons (CC0); the
-     Windows mark is four squares drawn here. Defined once in the sprite
+     Windows mark is four squares drawn here. Screenshots in img/ are real
+     app screens, run on made-up people. Defined once in the sprite
      below <body>, used with <use href="#i-…">. -->
 <style>
   :root {
-    --ink: #18181b; --muted: #71717a; --paper: #ffffff; --wash: #f7f7f8;
-    --line: #e5e5e8; --accent: #4D7C0F; --accent-vivid: #65A30D; --accent-soft: #ECFCCB;
+    --ink: #15181d; --muted: #59616d; --paper: #f3f5f8; --wash: #ffffff;
+    --line: #dfe3e9; --accent: #47740d; --accent-vivid: #65A30D; --accent-soft: #ECFCCB;
     --bar: #101012; --good: #15803d; --good-soft: #eaf4ee;
     --warn: #b45309; --warn-soft: #fbf0dc;
     --bad: #b91c1c;
@@ -66,47 +67,56 @@
   .os { width: 1.15em; height: 1.15em; fill: currentColor; flex: none; }
   .btn .sub { margin-left: auto; padding-left: 12px; font-size: 13px; font-weight: 500; opacity: .8; }
 
-  .hero { padding: 56px 0 30px; display: grid;
-    grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
-    gap: 48px; align-items: center; }
+  .hero { padding: 56px 0 30px; max-width: 800px; }
   h1 { font-size: clamp(34px, 5vw, 54px); font-weight: 800;
     letter-spacing: -1.8px; line-height: 1.07; margin: 0 0 18px; }
   .hero p.sub { font-size: 19px; color: var(--muted); margin: 0 0 26px; }
   .hero .cta { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
   .cta .small { font-size: 13px; color: var(--muted); flex-basis: 100%; }
 
-  /* CSS mockup of the Run screen: no real screenshot, nothing to leak */
-  .mock { background: var(--wash); border: 1px solid var(--line);
-    border-radius: 14px; box-shadow: 0 24px 60px #0000001f;
-    overflow: hidden; font-size: 12px; }
-  .mock .bar3 { display: flex; gap: 6px; padding: 11px 13px;
-    border-bottom: 1px solid var(--line); }
-  .mock .bar3 i { width: 10px; height: 10px; border-radius: 50%;
-    background: var(--line); }
-  .mock .pad { padding: 14px 16px 16px; }
-  .mock h4 { margin: 0 0 10px; font-size: 14px; letter-spacing: -.3px; }
-  .tiles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
-    margin-bottom: 10px; }
-  .tile { background: var(--paper); border: 1px solid var(--line);
-    border-radius: 8px; padding: 9px 11px; }
-  .tile b { display: block; font-size: 17px; letter-spacing: -.5px; }
-  .tile span { color: var(--muted); font-size: 10.5px; }
-  .frow { display: flex; align-items: center; gap: 8px; background: var(--paper);
-    border: 1px solid var(--line); border-radius: 8px; padding: 8px 11px;
-    margin-top: 6px; }
-  .frow .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis;
-    white-space: nowrap; }
+  /* Real screens from the app (img/), run on made-up people; light and dark */
+  .shot { margin: 0; }
+  .win { border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    background: var(--wash); box-shadow: 0 24px 60px #0000001f; }
+  .win .bar3 { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .win .bar3 i { width: 10px; height: 10px; border-radius: 50%; background: var(--line); }
+  .win img { display: block; width: 100%; height: auto; }
+  .shot figcaption { font-size: 14px; color: var(--muted); margin-top: 12px; max-width: 820px; }
+  .shot figcaption b { color: var(--ink); }
+  .hero-shot { margin-top: 8px; }
+  .term-shot { margin-top: 26px; }
+  /* callouts on the AI terminal screenshot; positions are fractions of the picture */
+  .annot { position: relative; }
+  .annot .co { position: absolute; top: 50%; width: 34%; margin: 0; padding: 10px 13px;
+    background: #a3e635; color: #101012; font-size: 14px; line-height: 1.4; font-weight: 600;
+    border-radius: 10px; box-shadow: 0 8px 22px #00000059; }
+  .annot .co b { display: inline-grid; place-items: center; width: 20px; height: 20px; margin-right: 7px;
+    border-radius: 50%; background: #101012; color: #a3e635; font-size: 12px; vertical-align: 1px; }
+  .annot .co1 { left: 25%; }
+  .annot .co2 { right: 3.5%; width: 30%; }
+  .annot .arr { position: absolute; width: 3px; margin-left: -1.5px; background: #a3e635;
+    box-shadow: 0 0 0 1px #10101259; }
+  .annot .arr::after { content: ""; position: absolute; left: 50%; bottom: -9px; transform: translateX(-50%);
+    border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 10px solid #a3e635; }
+  .annot .arr1 { left: 42%; top: 60%; height: 19%; }
+  .annot .arr2 { left: 92.5%; top: 60%; height: 15%; }
+  .annot .pin { display: none; position: absolute; width: 22px; height: 22px; transform: translate(-50%, -50%);
+    border-radius: 50%; background: #a3e635; color: #101012; font-size: 12px; font-weight: 700;
+    line-height: 22px; text-align: center; box-shadow: 0 0 0 2px #101012; }
+  .annot .pin1 { left: 50%; top: 87%; }
+  .annot .pin2 { left: 92.5%; top: 77.5%; }
+  .term-shot .legend { display: none; margin: 12px 0 0; padding-left: 1.3em; font-size: 14px; color: var(--muted); }
+  .term-shot .legend li { margin-bottom: 4px; }
+  .term-shot .legend b { color: var(--ink); }
+  @media (max-width: 760px) {
+    .annot .co, .annot .arr { display: none; }
+    .annot .pin { display: block; }
+    .term-shot .legend { display: block; }
+  }
   .pill { font-size: 10px; font-weight: 700; border-radius: 5px; padding: 2px 7px; }
   .pill.g { color: var(--good); background: var(--good-soft); }
   .pill.w { color: var(--warn); background: var(--warn-soft); }
   .pill.n { color: var(--muted); background: var(--wash); border: 1px solid var(--line); }
-  .mock .ai { margin-top: 10px; color: var(--muted); font-size: 11px;
-    display: flex; flex-wrap: wrap; gap: 4px 14px; }
-  .sw { display: inline-flex; align-items: center; gap: 6px; }
-  .sw i { width: 22px; height: 12px; border-radius: 7px; background: var(--line);
-    position: relative; display: inline-block; }
-  .sw i::after { content: ""; position: absolute; left: 2px; top: 2px; width: 8px;
-    height: 8px; border-radius: 50%; background: var(--paper); }
 
   .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
     background: var(--wash); margin-top: 26px; }
@@ -139,7 +149,7 @@
   .note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
 
   .proof { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
-  .proof .card { background: var(--paper); }
+  .proof .card { background: var(--wash); }
   .proof .card b.t { color: var(--accent); margin-top: 0; }
 
   .tokenline { background: var(--bar); color: #e4e4e7; border-radius: 10px;
@@ -176,6 +186,18 @@
   .cc th:first-child, .cc td:first-child { color: var(--good); }
   .cc th:last-child, .cc td:last-child { color: var(--bad); }
 
+  .loop { margin-top: 56px; scroll-margin-top: 20px; }
+  .loop h3 { font-size: 22px; letter-spacing: -.6px; margin-bottom: 10px; }
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tabs input { position: absolute; opacity: 0; pointer-events: none; }
+  .tabs label { font-size: 14px; font-weight: 650; padding: 8px 14px; border: 1px solid var(--line);
+    border-radius: 9px; cursor: pointer; color: var(--muted); background: var(--paper); }
+  .tabs input:checked + label { color: var(--ink); border-color: var(--accent-vivid); background: var(--accent-soft); }
+  .tabs input:focus-visible + label { outline: 2px solid var(--accent-vivid); outline-offset: 2px; }
+  .tabs .pane { display: none; flex-basis: 100%; margin-top: 10px; }
+  #loop1:checked ~ .p1, #loop2:checked ~ .p2, #loop3:checked ~ .p3,
+  #loop4:checked ~ .p4, #loop5:checked ~ .p5 { display: block; }
+
   .faq { max-width: 720px; }
   .faq details { border-top: 1px solid var(--line); padding: 4px 0; }
   .faq details:last-child { border-bottom: 1px solid var(--line); }
@@ -183,9 +205,18 @@
   .faq p { margin: 0 0 16px; color: var(--muted); }
 
   /* download */
-  .dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
+  .dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
   .plat { background: var(--wash); border: 1px solid var(--line); border-radius: 14px;
-    padding: 26px; scroll-margin-top: 20px; min-width: 0; }
+    padding: 26px; scroll-margin-top: 20px; min-width: 0;
+    display: grid; grid-row: span 3; grid-template-rows: subgrid; grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px; align-content: start; }
+  .plat > h3 { margin: 0; align-self: start; }
+  .plat > .intro { font-size: 13.5px; color: var(--muted); margin: 0; line-height: 1.5; align-self: end; }
+  .plat > .intro b { color: var(--ink); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .plat > .body { align-self: start; }
+  .rest > .pkg:first-child { margin-top: 4px; }
+  .rest { margin-top: 12px; }
+  .rest > .meta:first-child { margin-top: 0; }
   .plat.rec { border-color: var(--accent-vivid); }
   .pkg + .pkg { margin-top: 16px; }
   .pkglabel { font-size: 13.5px; color: var(--muted); margin: 0 0 8px; line-height: 1.5; }
@@ -193,8 +224,7 @@
   .cmd { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px;
     color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px;
     padding: 8px 10px; margin: 8px 0 0; white-space: pre; overflow-x: auto; }
-  .dl .lede { margin: 0 0 14px; }
-  .dl h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .dl h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
   .dl h3 .os { width: 20px; height: 20px; }
   .dlbtns { display: grid; gap: 8px; }
   .dl .meta { font-size: 13.5px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
@@ -217,9 +247,8 @@
     .dl { grid-template-columns: 1fr; }
   }
   @media (max-width: 820px) {
-    .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 34px; }
+    .hero { padding-top: 34px; }
     .grid3, .proof, .grid2, .dl { grid-template-columns: 1fr; }
-    .tiles { grid-template-columns: repeat(2, 1fr); }
     .chain { flex-direction: column; }
     .node { flex: 0 0 auto; }
     .arrow { transform: rotate(90deg); align-self: flex-start; margin-left: 12px; }
@@ -269,27 +298,13 @@
           <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">release notes</a>. Windows has the earlier 0.4.3.</span>
       </div>
     </div>
-    <div class="mock" role="img" aria-label="The app after a run: identifiers and faces removed, files marked clean or needing review, sharing with agents off">
-      <div class="bar3"><i></i><i></i><i></i></div>
-      <div class="pad">
-        <h4>2026 packets <span style="color:var(--muted);font-weight:400">· 6 files · 9 s · FERPA</span></h4>
-        <div class="tiles">
-          <div class="tile"><b>847</b><span>identifiers removed</span></div>
-          <div class="tile"><b>3</b><span>faces removed</span></div>
-          <div class="tile"><b>2</b><span>pages read by OCR</span></div>
-          <div class="tile"><b>1</b><span>page to check</span></div>
-        </div>
-        <div class="frow"><span class="name">Abbott_note.txt</span><span class="pill g">Clean</span></div>
-        <div class="frow"><span class="name">Lee_scanned_letter.pdf</span><span class="pill w">Review</span></div>
-        <div class="frow"><span class="name">Reyes_passport_copy.jpg</span><span class="pill w">Review</span></div>
-        <div class="frow"><span class="name">Reyes_Omar_letter.pdf</span><span class="pill g">Clean</span></div>
-        <div class="ai">
-          <span>Files for AI: <b>4 ready</b> · 2 waiting for review</span>
-          <span class="sw"><i></i> Share with agents: off</span>
-        </div>
-      </div>
-    </div>
   </div>
+  <figure class="shot hero-shot">
+    <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+      <picture><source srcset="img/run-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/run-light.webp" width="2040" height="1290" alt="De-ID's Run screen after a run on a folder of five made-up appeal documents: 62 identifiers removed, one page read by OCR, four files clean and one scanned letter to review, FERPA's settings on." decoding="async"></picture></div>
+    <figcaption>The Run screen after a real run on five made-up documents: 62 identifiers removed in 5 seconds,
+      one scanned letter flagged for a person to check.</figcaption>
+  </figure>
 </div>
 
 <div class="strip"><div class="wrap">
@@ -342,16 +357,16 @@
       terminal, a folder and your file manager. What an AI sees has the names taken
       out on your computer first, and what comes back can have them put back, on
       your screen only.</p>
-    <div class="chain" role="img" aria-label="You copy a request that names Omar Reyes and gives his email address. After copying twice (Command-C on a Mac, Control-C on Windows), the AI gets the same request with a person token and an email token instead. Restore names on the AI's answer puts Omar Reyes back, marked.">
-      <div class="node"><b>You copy</b><span class="mono">Summarise Omar Reyes's appeal and
-        draft a reply to omar.reyes@example.com.</span></div>
+    <div class="chain" role="img" aria-label="You copy a request that names John Doe and gives his email address. After copying twice (Command-C on a Mac, Control-C on Windows), the AI gets the same request with a person token and an email token instead. Restore names on the AI's answer puts John Doe back, marked.">
+      <div class="node"><b>You copy</b><span class="mono">Summarise John Doe's appeal and
+        draft a reply to john.doe@example.com.</span></div>
       <div class="arrow">→</div>
       <div class="node hot"><b>Copy twice: the AI gets</b><span class="mono">Summarise
         <span class="tok">&lt;PERSON_4f2a1c&gt;</span>'s appeal and draft a reply to
         <span class="tok">&lt;EMAIL_ADDRESS_9b1d07&gt;</span>.</span></div>
       <div class="arrow">→</div>
       <div class="node"><b>Restore names on the answer</b><span class="mono">Dear
-        <span class="back">Omar Reyes</span>, thank you for your appeal…</span></div>
+        <span class="back">John Doe</span>, thank you for your appeal…</span></div>
     </div>
     <div class="grid2">
       <div class="card"><b class="t">Copy de-identified, Restore names</b>
@@ -426,6 +441,27 @@
         <div class="chips"><span class="chip any">any tool that reads files</span><span class="chip any">a local model</span></div>
         <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span><span class="pill g">Linux</span></div></div>
     </div>
+    <figure class="shot term-shot">
+      <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+        <div class="annot">
+          <picture><source srcset="img/ai-terminal-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/ai-terminal-light.webp" width="2040" height="1516" alt="The AI terminal with a Contained Claude Code session: the exchange on screen shows only tokens such as PERSON and STUDENT_ID, and in the send box below, a typed name and email address are underlined before sending. Callouts point to the send box and to Type directly." loading="lazy" decoding="async"></picture>
+          <span class="arr arr1" aria-hidden="true"></span>
+          <span class="arr arr2" aria-hidden="true"></span>
+          <p class="co co1"><b aria-hidden="true">1</b>Type here. Names, IDs and contact details become tokens
+            before Claude Code sees them.</p>
+          <p class="co co2"><b aria-hidden="true">2</b>Or choose <i>Type directly</i> to work in the tool itself.
+            Claude Code still refuses a prompt with a name in it.</p>
+          <span class="pin pin1" aria-hidden="true">1</span>
+          <span class="pin pin2" aria-hidden="true">2</span>
+        </div></div>
+      <ol class="legend">
+        <li><b>The send box.</b> Type here: names, IDs and contact details become tokens before Claude Code sees them.</li>
+        <li><b>Type directly</b> hands the keyboard to the tool, for its own menus and commands. Claude Code still
+          refuses a prompt with a name in it.</li>
+      </ol>
+      <figcaption><b>The AI terminal</b>, with a sample Claude Code session. Either way, the exchange on screen is
+        tokens; hover one to see who it is, on your screen only.</figcaption>
+    </figure>
     <p class="note">ChatGPT's desktop app can't use De&#8209;ID's read-only tool: it
       connects only to tools hosted on the internet. With ChatGPT, use Copy and
       restore or Files for AI. Product names belong to their owners; De&#8209;ID
@@ -473,7 +509,7 @@
         <p><b>Audit this run</b> draws pages at random for a spot check. Mark what
         slipped through in the clean copy, or mark the original from scratch and
         compare word by word. The score is counts first, and the misses become
-        fixes in one go.</p></div>
+        fixes in one go. <a href="#review">See it ↓</a></p></div>
       <div class="card">
         <b class="t">The same result every run</b>
         <p>Run the same files again and the outputs are identical, byte for byte.
@@ -489,6 +525,61 @@
         AI agent that read an original. Then you don't have to take the tool's
         word for it either.</p>
         <p class="note">Mac only for now; Windows audits are planned.</p></div>
+    </div>
+
+    <div class="loop" id="review">
+      <h3>People stay in the loop, on purpose.</h3>
+      <p class="lead">De&#8209;ID does the first pass. A person makes the calls it can't: it points them
+        at the pages that need a look, waits for their fixes, and lets them spot-check its work two ways.</p>
+      <div class="tabs">
+        <input type="radio" name="loop" id="loop1" checked><label for="loop1">Flagged for review</label>
+        <input type="radio" name="loop" id="loop2"><label for="loop2">Fix it on the page</label>
+        <input type="radio" name="loop" id="loop3"><label for="loop3">Fix it in the text</label>
+        <input type="radio" name="loop" id="loop4"><label for="loop4">Soft audit</label>
+        <input type="radio" name="loop" id="loop5"><label for="loop5">Hard audit</label>
+        <figure class="shot pane p1">
+          <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+            <picture><source srcset="img/review-scan-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/review-scan-light.webp" width="2040" height="1462" alt="Review of a scanned recommendation letter: a warning to check each page, with the original on the left and the redacted copy on the right." loading="lazy" decoding="async"></picture></div>
+          <figcaption><b>Flagged for review.</b> A scanned page is flagged, because OCR can miss words. The
+            original and the clean copy sit side by side: drag a box over anything left and black it out, or
+            select a word and remove it in every file of the run. Changes wait where you can see them, one
+            <b>Apply</b> processes each file once, and <b>Mark reviewed</b> records who looked.</figcaption>
+        </figure>
+        <figure class="shot pane p2">
+          <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+            <picture><source srcset="img/fix-pdf-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/fix-pdf-light.webp" width="2040" height="1534" alt="Review of an advising record, Redacted PDF tab: a handwritten margin note on the original and the clean copy has a dashed box marked 'blacked out', and a bar at the bottom says 5 changes in 1 file not applied yet, with Apply and Review the list." loading="lazy" decoding="async"></picture></div>
+          <figcaption><b>Fix it on the page.</b> A handwritten note in the margin is a picture De&#8209;ID can't
+            read, so the reviewer drags a box over it. The box waits, dashed, as "→ blacked out", on the original
+            and the clean copy. The bar at the bottom counts what's waiting ("5 changes in 1 file not applied
+            yet") until <b>Apply</b> processes the file once.</figcaption>
+        </figure>
+        <figure class="shot pane p3">
+          <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+            <picture><source srcset="img/fix-text-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/fix-text-light.webp" width="2040" height="1534" alt="Review of the same record, Text tab: the student's name and nickname are struck through and marked 'removed as Names', and a book title and its author are marked 'kept'." loading="lazy" decoding="async"></picture></div>
+          <figcaption><b>Fix it in the text.</b> In the Markdown, the reviewer removes what De&#8209;ID missed
+            (the student's name on the header line, and a nickname it caught twice but missed once) and keeps what
+            it got wrong (a book and its author, taken for people). Each change shows where it is, struck through
+            or marked kept, and a click cancels it.</figcaption>
+        </figure>
+        <figure class="shot pane p4">
+          <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+            <picture><source srcset="img/audit-soft-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/audit-soft-light.webp" width="2040" height="1462" alt="A finished soft audit: De-ID removed 40 things on 3 pages drawn at random, and the audit found nothing more. It caught 40 of 40, a 3-page spot check." loading="lazy" decoding="async"></picture></div>
+          <figcaption><b>Soft audit.</b> <b>Audit this run</b> draws pages at random (10% of the run, at least
+            3, never more than 10) and shows the clean copies as they went out. The reviewer marks anything
+            still there. The score is what De&#8209;ID removed and what the audit found besides, counts
+            first.</figcaption>
+        </figure>
+        <figure class="shot pane p5">
+          <div class="win"><div class="bar3"><i></i><i></i><i></i></div>
+            <picture><source srcset="img/audit-hard-dark.webp" media="(prefers-color-scheme: dark)"><img src="img/audit-hard-light.webp" width="2040" height="1462" alt="A hard audit in progress: the original page, with nothing De-ID found shown, for the reviewer to mark everything that identifies someone." loading="lazy" decoding="async"></picture></div>
+          <figcaption><b>Hard audit.</b> The same random draw, but of the originals, with nothing De&#8209;ID
+            found shown. The reviewer marks everything that identifies someone, from scratch; after
+            <b>Finish</b>, De&#8209;ID's work is compared word by word and each difference settled. What it
+            missed becomes a fix in one go.</figcaption>
+        </figure>
+      </div>
+      <p class="note">Real screens from De&#8209;ID, run on made-up documents. The Audits screen adds up
+        every audit on the computer, and each one exports to Excel.</p>
     </div>
   </section>
 
@@ -549,11 +640,15 @@
       <div class="card"><b class="t">What the switch does</b>
         <p>Turns on and locks the identifier types the standard lists (for Safe
         Harbor, the 18, including labelled IDs such as MRN, member and policy
-        numbers, ages over 89, ZIP codes on their own, organisations and places of
-        birth), removes photos and faces, and reads every scanned page.</p>
-        <p>The run report says which standard's settings were on. Two of Safe
-        Harbor's 18 aren't looked for in text yet: vehicle identifiers and
-        device serial numbers.</p></div>
+        numbers, ages over 89, ZIP codes on their own, organisations, places of
+        birth, and vehicle and device numbers), removes photos and faces, and reads
+        every scanned page.</p>
+        <p><b>Each of Safe Harbor's 18 has something looking for it,</b> vehicle IDs
+        and licence plates and device serial numbers included (from 0.7.9). None of
+        the 18 is caught every time: a plate or a serial number with no label, or a
+        name nothing points to, can still get through. So every run ends with a
+        person's review, and the run report says which standard's settings were on
+        and what's still to check.</p></div>
       <div class="card"><b class="t">What it never says</b>
         <p>"Compliant." Both standards end in a human judgement: Safe Harbor needs
         no actual knowledge that what's left could identify someone; FERPA needs a
@@ -634,8 +729,9 @@
         terms. A year or a term on its own ("2026", "Fall 2026") stays, as Safe
         Harbor allows; a date with a month or a day goes whole. You
         can untick any of them for a run. Labelled IDs (MRN, member, policy),
-        ages over 89, ZIP codes on their own, organisations, places of birth and
-        national origin terms are off unless you or a standard turn them on.
+        ages over 89, ZIP codes on their own, organisations, places of birth,
+        national origin terms, and vehicle and device numbers (from 0.7.9) are off
+        unless you or a standard turn them on.
         Names and IDs you already know are removed wherever they appear, and a
         rules pack can add your institution's own ID formats. <b>What it can
         do</b>, in the app's sidebar, lists it all.</p></details>
@@ -720,14 +816,14 @@
     <div class="dl">
       <div class="plat rec" id="mac">
         <h3><svg class="os" aria-hidden="true"><use href="#i-apple"/></svg>macOS <span class="pill g">Latest · recommended</span></h3>
+        <p class="intro">Pick your Mac's chip: Apple menu → About This Mac shows "Chip: Apple M…" or "Processor: … Intel …".</p>
+        <div class="body">
         <div class="dlbtns">
           <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_aarch64.dmg">Apple silicon<span class="sub">M1 or newer</span></a>
           <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_x64.dmg">Intel<span class="sub">Intel processor</span></a>
         </div>
-        <div class="meta">
-          Which one? Apple menu → About This Mac shows "Chip: Apple M…" for Apple silicon, or "Processor: … Intel …" for Intel.<br>
-          0.7.8 · macOS 14 or later · about 600 MB · signed and notarized
-        </div>
+        <div class="rest">
+        <div class="meta">0.7.8 · macOS 14 or later · about 600 MB · signed and notarized</div>
         <ol>
           <li>Open the DMG and drag <b>De&#8209;ID</b> to Applications. It's notarized, so it opens like any other app.</li>
           <li>The first launch takes up to a minute while the model loads. Nothing is downloaded; it's all in the app.
@@ -737,17 +833,21 @@
             salt, crosswalk, runs and settings carry over.</li>
         </ol>
         <p class="note">Your data lives in <span class="mono path">~/Library/Application Support/app.deid.desktop/</span>. Keep FileVault on.</p>
+        </div>
+        </div>
       </div>
       <div class="plat" id="windows">
         <h3><svg class="os" aria-hidden="true"><use href="#i-windows"/></svg>Windows <span class="pill n">Earlier version · 0.4.3</span> <span class="pill w">Not signed yet</span></h3>
-        <p class="meta lede">One installer for every Windows PC: it runs natively on Intel and AMD, and on ARM
-          PCs such as Snapdragon laptops under Windows 11's built-in emulation. It's the earlier 0.4.3, without
-          what's new since 0.5 and without audits.</p>
+        <p class="intro">One installer for every Windows PC, whether it has an Intel, AMD or ARM chip.</p>
+        <div class="body">
         <div class="dlbtns">
           <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Intel, AMD or ARM<span class="sub">x64</span></a>
         </div>
+        <div class="rest">
         <div class="meta">
-          Windows 10 or 11 on Intel or AMD · Windows 11 on ARM · about 480 MB
+          Windows 10 or 11 on Intel or AMD, and Windows 11 on ARM (such as Snapdragon laptops) under its
+          built-in emulation · about 480 MB. It's the earlier 0.4.3, without what's new since 0.5 and without
+          audits.
         </div>
         <ol>
           <li>If your browser says the file isn't commonly downloaded, choose <b>Keep</b>.</li>
@@ -759,16 +859,18 @@
         </ol>
         <p class="note">On a work PC, IT may have turned off Run anyway; ask them to allow the installer.
         Your data lives in <span class="mono path">%LOCALAPPDATA%\io.github.hantswilliams.deid\</span>. Keep BitLocker on.</p>
+        </div>
+        </div>
       </div>
       <div class="plat" id="linux">
         <h3><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux <span class="pill g">New · 0.7.8</span></h3>
-        <div class="pkg">
-          <p class="pkglabel"><b>.deb</b> for Ubuntu 22.04+, Debian 12+, Linux Mint 21+ and Pop!_OS 22.04+</p>
-          <div class="dlbtns">
-            <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_amd64.deb">Intel or AMD<span class="sub">amd64</span></a>
-            <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_arm64.deb">ARM<span class="sub">arm64</span></a>
-          </div>
+        <p class="intro"><b>.deb</b> for Ubuntu 22.04+, Debian 12+, Linux Mint 21+ and Pop!_OS 22.04+</p>
+        <div class="body">
+        <div class="dlbtns">
+          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_amd64.deb">Intel or AMD<span class="sub">amd64</span></a>
+          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_arm64.deb">ARM<span class="sub">arm64</span></a>
         </div>
+        <div class="rest">
         <div class="pkg">
           <p class="pkglabel"><b>.rpm</b> for Fedora 36+, and RHEL, Rocky Linux and AlmaLinux 10 with EPEL</p>
           <div class="dlbtns">
@@ -793,6 +895,8 @@ sudo dnf install ./De-ID-0.7.8-1.x86_64.rpm</pre>
         icon only with the AppIndicator extension. A blank window on a PC with an NVIDIA card? Start it with
         <span class="mono path">WEBKIT_DISABLE_DMABUF_RENDERER=1 deid-desktop</span>. Your data lives in
         <span class="mono path">~/.local/share/app.deid.desktop/</span>. Keep the disk encrypted (LUKS).</p>
+        </div>
+        </div>
       </div>
     </div>
     <div class="dl-foot">
