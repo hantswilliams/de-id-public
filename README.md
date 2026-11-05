@@ -18,10 +18,16 @@ Public releases of the De-ID tool. Website: https://hantswilliams.github.io/de-i
   It doesn't have what's new since 0.5. The installer isn't signed yet: when SmartScreen shows
   "Windows protected your PC", choose **More info**, then **Run anyway**.
 
-## Linux: coming soon
+## Linux: 0.7.8 (beta)
 
-`.deb` (Ubuntu 22.04+, Debian 12+) and `.rpm` (Fedora 36+; RHEL, Rocky and Alma 10) packages,
-for Intel/AMD and ARM, are being tested.
+- [Release notes](https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8)
+- `.deb` for Ubuntu 22.04+, Debian 12+ (and Linux Mint 21+, Pop!_OS 22.04+):
+  [Intel/AMD](https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_amd64.deb) ·
+  [ARM](https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_arm64.deb)
+- `.rpm` for Fedora 36+, and RHEL, Rocky Linux and AlmaLinux 10 with EPEL:
+  [Intel/AMD](https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID-0.7.8-1.x86_64.rpm) ·
+  [ARM](https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID-0.7.8-1.aarch64.rpm)
+- Install with `sudo apt install ./De-ID_0.7.8_amd64.deb` or `sudo dnf install ./De-ID-0.7.8-1.x86_64.rpm`.
 
 ## Earlier
 

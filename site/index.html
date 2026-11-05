@@ -21,6 +21,7 @@
     --line: #e5e5e8; --accent: #4D7C0F; --accent-vivid: #65A30D; --accent-soft: #ECFCCB;
     --bar: #101012; --good: #15803d; --good-soft: #eaf4ee;
     --warn: #b45309; --warn-soft: #fbf0dc;
+    --bad: #b91c1c;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
@@ -28,6 +29,7 @@
       --line: #27272a; --accent: #A3E635; --accent-vivid: #A3E635; --accent-soft: #1A2E05;
       --bar: #000000; --good: #34d399; --good-soft: #0c2419;
       --warn: #fbbf24; --warn-soft: #2a2110;
+      --bad: #f87171;
     }
     :root:not([data-theme="light"]) .btn { color: #101012; }
     :root:not([data-theme="light"]) .btn.ghost { color: var(--ink); }
@@ -62,11 +64,7 @@
   .btn.sm { padding: 9px 14px; font-size: 14px; }
   .btn.os-btn { display: inline-flex; align-items: center; gap: 9px; }
   .os { width: 1.15em; height: 1.15em; fill: currentColor; flex: none; }
-  .btn .tag { font-size: 10px; font-weight: 750; letter-spacing: .6px; text-transform: uppercase;
-    color: var(--muted); border: 1px solid var(--line); border-radius: 5px; padding: 1px 6px; }
   .btn .sub { margin-left: auto; padding-left: 12px; font-size: 13px; font-weight: 500; opacity: .8; }
-  .btn.off { color: var(--muted); cursor: default; }
-  .btn.off:hover { filter: none; }
 
   .hero { padding: 56px 0 30px; display: grid;
     grid-template-columns: minmax(0, 7fr) minmax(0, 6fr);
@@ -175,6 +173,8 @@
   td { padding: 9px 12px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top;
     color: var(--muted); line-height: 1.5; }
   td:first-child { color: var(--ink); }
+  .cc th:first-child, .cc td:first-child { color: var(--good); }
+  .cc th:last-child, .cc td:last-child { color: var(--bad); }
 
   .faq { max-width: 720px; }
   .faq details { border-top: 1px solid var(--line); padding: 4px 0; }
@@ -183,15 +183,16 @@
   .faq p { margin: 0 0 16px; color: var(--muted); }
 
   /* download */
-  .dl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; }
+  .dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; align-items: start; }
   .plat { background: var(--wash); border: 1px solid var(--line); border-radius: 14px;
-    padding: 26px; scroll-margin-top: 20px; }
+    padding: 26px; scroll-margin-top: 20px; min-width: 0; }
   .plat.rec { border-color: var(--accent-vivid); }
-  .plat.soon { grid-column: 1 / -1; display: flex; flex-wrap: wrap; align-items: center;
-    gap: 12px 26px; padding: 20px 26px; }
-  .plat.soon h3 { margin: 0; }
-  .plat.soon .lede { flex: 1 1 380px; margin: 0; }
-  .plat.soon .note { flex-basis: 100%; margin: 0; }
+  .pkg + .pkg { margin-top: 16px; }
+  .pkglabel { font-size: 13.5px; color: var(--muted); margin: 0 0 8px; line-height: 1.5; }
+  .pkglabel b { color: var(--ink); font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
+  .cmd { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 12px;
+    color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px;
+    padding: 8px 10px; margin: 8px 0 0; white-space: pre; overflow-x: auto; }
   .dl .lede { margin: 0 0 14px; }
   .dl h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
   .dl h3 .os { width: 20px; height: 20px; }
@@ -213,6 +214,7 @@
 
   @media (max-width: 900px) {
     .grid4 { grid-template-columns: repeat(2, 1fr); }
+    .dl { grid-template-columns: 1fr; }
   }
   @media (max-width: 820px) {
     .hero { grid-template-columns: 1fr; gap: 34px; padding-top: 34px; }
@@ -261,9 +263,10 @@
       <div class="cta">
         <a class="btn os-btn" href="#mac"><svg class="os" aria-hidden="true"><use href="#i-apple"/></svg>macOS</a>
         <a class="btn ghost os-btn" href="#windows"><svg class="os" aria-hidden="true"><use href="#i-windows"/></svg>Windows</a>
-        <a class="btn ghost os-btn" href="#linux"><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux <span class="tag">Soon</span></a>
-        <span class="small">Beta 0.7.8 for macOS 14 or later, Apple silicon and Intel, signed and notarized ·
-          <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">release notes</a>. Windows has the earlier 0.4.3, and Linux is on its way.</span>
+        <a class="btn ghost os-btn" href="#linux"><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux</a>
+        <span class="small">Beta 0.7.8 for macOS 14 or later (Apple silicon and Intel, signed and notarized)
+          and Linux (<span class="mono">.deb</span> and <span class="mono">.rpm</span>, Intel/AMD and ARM) ·
+          <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">release notes</a>. Windows has the earlier 0.4.3.</span>
       </div>
     </div>
     <div class="mock" role="img" aria-label="The app after a run: identifiers and faces removed, files marked clean or needing review, sharing with agents off">
@@ -324,7 +327,7 @@
         <p>Claude Code, Claude Desktop and Copilot in VS Code read the runs you
         share through De&#8209;ID's own read-only tool. Originals stay out of reach,
         and every read is logged.</p>
-        <p class="note">On Mac and Windows. <a href="#agents">How it works ↓</a></p></div>
+        <p class="note">On Mac, Windows and Linux. <a href="#agents">How it works ↓</a></p></div>
     </div>
     <div class="tokenline mono">Candidate: <span class="t">&lt;PERSON_7f3a2c&gt;</span> · <span class="t">&lt;EMAIL_ADDRESS_57898c&gt;</span> · <span class="t">&lt;PHONE_NUMBER_b3179c&gt;</span></div>
     <p class="tokennote">The same person gets the same token across the whole run, in the text and in the
@@ -360,7 +363,8 @@
         so the AI can follow along.</p>
         <p>Copy the answer the same way and a small window shows it with the real
         names back and marked, after a check for a real name the AI shouldn't have
-        had, a token from an earlier conversation, or one it made up.</p></div>
+        had, a token from an earlier conversation, or one it made up. On Linux,
+        both are in the tray menu: Linux doesn't let an app count copies.</p></div>
       <div class="card"><b class="t">The AI terminal</b>
         <p>Run Claude Code, Codex, Gemini CLI, OpenCode, Aider and others in a
         terminal inside De&#8209;ID, signed in with their own accounts. Type in the
@@ -379,12 +383,13 @@
         <span class="mono">needs-review</span>), and the originals move to
         <span class="mono">done</span>. On battery, files wait until you plug
         in.</p></div>
-      <div class="card"><b class="t">From Finder or Explorer</b>
-        <p>Right-click files or a folder → <b>De-identify with De&#8209;ID</b> to
-        clean them with your defaults, or <b>Open With → De&#8209;ID</b> to choose
-        how. Close the window and De&#8209;ID stays in the menu bar (the
-        notification area on Windows): runs carry on, a notification says when
-        each ends, and <b>Open at login</b> starts it with just the icon.</p></div>
+      <div class="card"><b class="t">From your file manager</b>
+        <p>Right-click files or a folder in Finder, Explorer, GNOME Files,
+        Dolphin, Nemo or Caja → <b>De-identify with De&#8209;ID</b> to clean them
+        with your defaults, or <b>Open With → De&#8209;ID</b> to choose how. Close
+        the window and De&#8209;ID stays in the menu bar (the notification area on
+        Windows, the tray on Linux): runs carry on, a notification says when each
+        ends, and <b>Open at login</b> starts it with just the icon.</p></div>
     </div>
     <p class="note"><b>Coming to Windows in the next release.</b> Today's Windows
       download is 0.4.3. De&#8209;ID itself
@@ -404,22 +409,22 @@
         <p>Any AI chat, in a browser or an app: copy twice, paste, and copy the
         answer back.</p>
         <div class="chips"><span class="chip">ChatGPT</span><span class="chip">Claude</span><span class="chip">Gemini</span><span class="chip any">any AI chat</span></div>
-        <div class="plats"><span class="pill g">Mac</span><span class="pill n">Windows: next release</span></div></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill n">Windows: next release</span><span class="pill g">Linux</span></div></div>
       <div class="card"><b class="t">The AI terminal</b>
         <p>Command-line AI tools, run inside De&#8209;ID with what you type and
         paste cleaned first.</p>
         <div class="chips"><span class="chip">Claude Code</span><span class="chip">Codex</span><span class="chip">Gemini CLI</span><span class="chip">Antigravity</span><span class="chip">OpenCode</span><span class="chip">Aider</span><span class="chip any">any command you add</span></div>
-        <div class="plats"><span class="pill g">Mac</span><span class="pill n">Windows: next release</span></div></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill n">Windows: next release</span><span class="pill g">Linux</span></div></div>
       <div class="card"><b class="t">De&#8209;ID's read-only tool</b>
         <p>Agents list, read and search the runs you share, through MCP, and every
         read is logged. <a href="#agents">How ↓</a></p>
         <div class="chips"><span class="chip">Claude Code</span><span class="chip">Claude Desktop</span><span class="chip">Copilot in VS Code</span></div>
-        <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span></div></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span><span class="pill g">Linux</span></div></div>
       <div class="card"><b class="t">Files for AI</b>
         <p>A folder of Markdown and CSV with a read-me for the model. With a local
         model, nothing leaves the computer at all.</p>
         <div class="chips"><span class="chip any">any tool that reads files</span><span class="chip any">a local model</span></div>
-        <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span></div></div>
+        <div class="plats"><span class="pill g">Mac</span><span class="pill g">Windows</span><span class="pill g">Linux</span></div></div>
     </div>
     <p class="note">ChatGPT's desktop app can't use De&#8209;ID's read-only tool: it
       connects only to tools hosted on the internet. With ChatGPT, use Copy and
@@ -439,7 +444,7 @@
         <p>De-identification runs entirely on your computer. De&#8209;ID never sends
         your files or text anywhere, and no remote model helps decide what to
         remove. Before
-        every release, Mac and Windows alike, we run the app with the network
+        every release, Mac, Windows and Linux alike, we run the app with the network
         blocked, including the agents' tool, the Claude Code hook and the OCR
         workers as their own processes, and it ships only if nothing ever tried
         to connect.</p></div>
@@ -493,8 +498,8 @@
     <p class="lead">Coding agents on your own computer are the new way sensitive
       documents leak. De&#8209;ID gives Claude Code, Claude Desktop and Copilot in VS
       Code one read-only way in: the de-identified copies of the runs you choose
-      to share (on a Mac, the De&#8209;ID folder too), and nothing else. It works the
-      same on Mac and Windows.</p>
+      to share (on a Mac or Linux, the De&#8209;ID folder too), and nothing else. It
+      works the same on Mac, Windows and Linux.</p>
     <div class="chain" role="img" aria-label="An AI agent calls De-ID's read-only tool, which reaches the app's service with its own token, which serves only the shared de-identified runs and writes an activity log. A hook blocks Claude Code from reading the originals.">
       <div class="node"><b>Your AI agent</b><span>Claude Code · Claude Desktop · Copilot in VS Code</span></div>
       <div class="arrow">→</div>
@@ -506,7 +511,7 @@
     </div>
     <div class="grid2">
       <div>
-        <table>
+        <table class="cc">
           <tr><th>An agent can</th><th>An agent can't</th></tr>
           <tr><td>List the shared files: label, run, pages, whether reviewed</td><td>See a run you haven't shared</td></tr>
           <tr><td>Read one, a page range at a time</td><td>See an original, an original file name, or a folder path</td></tr>
@@ -696,9 +701,10 @@
         run report and the Agent activity PDF. It never goes into a de-identified
         file or Files for AI.</p></details>
       <details><summary>What do I get during the beta, and what do you want back?</summary>
-        <p>The full app, free: 0.7.8 on macOS (Apple silicon and Intel), and the
-        earlier 0.4.3 on Windows, without the clipboard, the AI terminal, the
-        De&#8209;ID folder or Finder. Linux is being tested. The
+        <p>The full app, free: 0.7.8 on macOS (Apple silicon and Intel) and on
+        Linux (Ubuntu, Debian, Fedora, RHEL and their relatives), and the earlier
+        0.4.3 on Windows, without the clipboard, the AI terminal, the De&#8209;ID
+        folder or the right-click entry. The
         documentation is in the app, under
         <b>Docs</b>, and works offline. In return we'd like honest feedback,
         especially about anything it missed, through the issue tracker or by
@@ -738,7 +744,7 @@
           PCs such as Snapdragon laptops under Windows 11's built-in emulation. It's the earlier 0.4.3, without
           what's new since 0.5 and without audits.</p>
         <div class="dlbtns">
-          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Download for Windows<span class="sub">x64 and ARM</span></a>
+          <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.4.3/De-ID_0.4.3_x64-setup.exe">Intel, AMD or ARM<span class="sub">x64</span></a>
         </div>
         <div class="meta">
           Windows 10 or 11 on Intel or AMD · Windows 11 on ARM · about 480 MB
@@ -754,13 +760,39 @@
         <p class="note">On a work PC, IT may have turned off Run anyway; ask them to allow the installer.
         Your data lives in <span class="mono path">%LOCALAPPDATA%\io.github.hantswilliams.deid\</span>. Keep BitLocker on.</p>
       </div>
-      <div class="plat soon" id="linux">
-        <h3><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux <span class="pill n">Coming soon</span></h3>
-        <p class="meta lede">The packages are built and being tested: a <span class="mono">.deb</span> for Ubuntu 22.04+
-          and Debian 12+, and an <span class="mono">.rpm</span> for Fedora 36+ and RHEL, Rocky and Alma 10, each for
-          Intel/AMD and ARM.</p>
-        <span class="btn ghost os-btn off" aria-disabled="true"><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Not available yet</span>
-        <p class="note">Want it on Linux first? <a href="mailto:hantsawilliams@gmail.com?subject=De-ID%20on%20Linux">Tell us your distribution</a>.</p>
+      <div class="plat" id="linux">
+        <h3><svg class="os" aria-hidden="true"><use href="#i-linux"/></svg>Linux <span class="pill g">New · 0.7.8</span></h3>
+        <div class="pkg">
+          <p class="pkglabel"><b>.deb</b> for Ubuntu 22.04+, Debian 12+, Linux Mint 21+ and Pop!_OS 22.04+</p>
+          <div class="dlbtns">
+            <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_amd64.deb">Intel or AMD<span class="sub">amd64</span></a>
+            <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID_0.7.8_arm64.deb">ARM<span class="sub">arm64</span></a>
+          </div>
+        </div>
+        <div class="pkg">
+          <p class="pkglabel"><b>.rpm</b> for Fedora 36+, and RHEL, Rocky Linux and AlmaLinux 10 with EPEL</p>
+          <div class="dlbtns">
+            <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID-0.7.8-1.x86_64.rpm">Intel or AMD<span class="sub">x86_64</span></a>
+            <a class="btn os-btn" href="https://github.com/hantswilliams/de-id-public/releases/download/desktop-v0.7.8/De-ID-0.7.8-1.aarch64.rpm">ARM<span class="sub">aarch64</span></a>
+          </div>
+        </div>
+        <div class="meta">
+          Which one? <span class="mono">dpkg --print-architecture</span> prints amd64 or arm64;
+          <span class="mono">uname -m</span> prints x86_64 or aarch64. About 700 to 780 MB.
+          RHEL, Rocky and Alma 9 aren't supported.
+        </div>
+        <ol>
+          <li>In a terminal, in the folder you saved it to:
+            <pre class="cmd">sudo apt install ./De-ID_0.7.8_amd64.deb
+sudo dnf install ./De-ID-0.7.8-1.x86_64.rpm</pre>
+            It needs <span class="mono">sudo</span>; on a managed PC, IT installs it. On RHEL, Rocky and Alma 10,
+            turn on EPEL first.</li>
+          <li>Open <b>De&#8209;ID</b> from the app menu; the first launch takes up to a minute.</li>
+        </ol>
+        <p class="note">Copy de-identified and Restore names are in the tray menu. Stock GNOME shows the tray
+        icon only with the AppIndicator extension. A blank window on a PC with an NVIDIA card? Start it with
+        <span class="mono path">WEBKIT_DISABLE_DMABUF_RENDERER=1 deid-desktop</span>. Your data lives in
+        <span class="mono path">~/.local/share/app.deid.desktop/</span>. Keep the disk encrypted (LUKS).</p>
       </div>
     </div>
     <div class="dl-foot">
@@ -769,7 +801,7 @@
         cross-reference (as sensitive as your originals), run history and settings, which is
         why the disk should be encrypted. To update, install a newer version over the old one;
         your data folder is kept. Pilot builds for testing · release notes for
-        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">macOS 0.7.8</a> and
+        <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.7.8">macOS and Linux 0.7.8</a> and
         <a href="https://github.com/hantswilliams/de-id-public/releases/tag/desktop-v0.4.3">Windows 0.4.3</a>.
         Checksums for each file are in the release notes.</p>
       <div class="links">
